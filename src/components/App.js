@@ -6,7 +6,7 @@ import Footer from "./Footer";
 
 export default function App() {
     return (
-        <div className="min-vh-100">
+        <div className="App">
             <Header/>
             <Main/>
             <Footer/>
