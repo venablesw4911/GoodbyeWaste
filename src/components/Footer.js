@@ -1,6 +1,6 @@
 export default function Footer(props) {
     return (
-        <footer>
+        <footer className="fixed-bottom">
             <h1>Insert footer here</h1>
         </footer>
     );
