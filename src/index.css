@@ -1,0 +1,34 @@
+* {
+    font-family: 'Red Hat Display', sans-serif;
+}
+
+a {
+    color: #CDC1FF;
+}
+
+.bg-primary {
+    background-color: #FFE9C9 !important;
+}
+
+.text-primary {
+    color: #804E49 !important;
+}
+
+.link-underline:hover {
+    text-decoration-color: #804E49 !important;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #FFE9C9;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 12px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+    background-color: #FFF;
+}
