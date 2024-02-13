@@ -3,11 +3,29 @@
 }
 
 a {
-    color: #CDC1FF;
+    color: #804E49;
+}
+
+.button-google {
+    background-color: white;
+}
+
+.button-google:hover {
+    background-color: lightgrey;
+}
+
+.navbar {
+    -webkit-box-shadow: 0 8px 6px -6px #999;
+    -moz-box-shadow: 0 8px 6px -6px #999;
+    box-shadow: 0 8px 6px -6px #999;
 }
 
 .bg-primary {
     background-color: #FFE9C9 !important;
+}
+
+.bg-action {
+    background-color: #CDC1FF !important;
 }
 
 .text-primary {
@@ -16,6 +34,23 @@ a {
 
 .link-underline:hover {
     text-decoration-color: #804E49 !important;
+}
+
+.button-action:hover {
+    background-color: #BCB0EE !important;
+}
+
+.header {
+    height: 5rem;
+}
+
+.login-box {
+    margin-top: 2.5rem;
+}
+
+.login-splash {
+    width: 100%;
+    transform: translateX(-50px);
 }
 
 ::-webkit-scrollbar {
@@ -29,6 +64,6 @@ a {
 
 ::-webkit-scrollbar-thumb {
     border-radius: 12px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.5);
     background-color: #FFF;
 }
