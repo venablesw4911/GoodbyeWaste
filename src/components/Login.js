@@ -8,7 +8,7 @@ export default function Login(props) {
             initial={{x: -window.innerWidth}}
             transition={{duration: 0.5}}
             animate={{x: 0}}
-            exit={{x: window.innerWidth, transition: {duration: 0.5}}}
+            exit={{x: -window.innerWidth, transition: {duration: 0.5}}}
         >
             <div className="d-none d-md-block my-auto col-md-6">
                 <img className="rounded-end-5 float-start login-splash"

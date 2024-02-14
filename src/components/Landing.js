@@ -10,7 +10,7 @@ export default function Landing(props) {
             initial={{x: window.innerWidth}}
             transition={{duration: 0.5}}
             animate={{x: 0}}
-            exit={{x: -window.innerWidth, transition: {duration: 0.5}}}
+            exit={{x: window.innerWidth, transition: {duration: 0.5}}}
             style={{
                 backgroundImage: `url(${splash})`,
                 backgroundSize: "100% auto",
