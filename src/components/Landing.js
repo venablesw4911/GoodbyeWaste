@@ -1,7 +1,7 @@
 import React from "react"
 import Carousel from 'react-bootstrap/Carousel';
 import {motion} from "framer-motion";
-import splash from "../assets/Landing-Splash.png"
+import splash from "../assets/Landing-Splash.webp"
 
 export default function Landing(props) {
     return (

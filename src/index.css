@@ -53,6 +53,18 @@ a {
     transform: translateX(-50px);
 }
 
+.height-row {
+    height: 2rem;
+}
+
+.p-underline {
+    border-bottom-width: 0;
+}
+
+.p-underline:hover {
+    border-bottom-width: medium;
+}
+
 ::-webkit-scrollbar {
     width: 12px;
 }
