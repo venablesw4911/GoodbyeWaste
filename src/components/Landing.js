@@ -7,7 +7,8 @@ export default function Landing(props) {
     return (
         <motion.main
             className="min-vh-100 min-vw-100 container row"
-            initial={true}
+            initial={{x: window.innerWidth}}
+            transition={{duration: 0.5}}
             animate={{x: 0}}
             exit={{x: -window.innerWidth, transition: {duration: 0.5}}}
             style={{

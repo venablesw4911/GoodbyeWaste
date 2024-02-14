@@ -8,7 +8,7 @@ export default function AnimatedRoutes(props) {
     const location = useLocation();
 
     return (
-        <AnimatePresence>
+        <AnimatePresence mode="wait" initial={false}>
             <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<Landing/>}/>
                 <Route path="/login" element={<Login/>}/>
