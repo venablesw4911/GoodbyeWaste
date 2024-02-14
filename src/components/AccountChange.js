@@ -7,7 +7,7 @@ import Signup from "./Signup";
 export default function AccountChange(props) {
     const [isLogin, setIsLogin] = useState(true);
 
-    let otherText = isLogin ? "Sign Up" : "Sign In";
+    let otherText = isLogin ? "Don't have an account" : "Already have an account";
 
     return (
         <motion.main
