@@ -1,14 +1,14 @@
 import '../App.css';
 
 import Header from "./Header";
-import Main from "./Main";
 import Footer from "./Footer";
+import AnimatedRoutes from "./AnimatedRoutes";
 
-export default function App() {
+export default function App(props) {
     return (
-        <div className="min-vh-100">
+        <div className="overflow-x-hidden min-vh-100 bg-primary">
             <Header/>
-            <Main/>
+            <AnimatedRoutes/>
             <Footer/>
         </div>
     );
