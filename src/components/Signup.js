@@ -2,7 +2,7 @@ export default function Signup(props) {
     return (
         <form className="container">
             <div className="height-row mb-3 w-75 mx-auto">
-                <input type="email" className="form-control" id="email" placeholder="Email/Username"/>
+                <input type="email" className="form-control" id="email" placeholder="Email"/>
             </div>
             <div className="height-row mb-3 w-75 mx-auto">
                 <input type="password" className="form-control" id="password" placeholder="Password"/>
@@ -15,9 +15,9 @@ export default function Signup(props) {
             </div>
             <div className="container-fluid w-75">
                 <div className="row">
-                    <hr className="border-2 col-5 my-auto"/>
-                    <p className="col-2 my-auto">OR</p>
-                    <hr className="border-2 col-5 my-auto"/>
+                    <hr className="border-2 col-4 col-md-5 my-auto"/>
+                    <p className="col-4 col-md-2 my-auto">OR</p>
+                    <hr className="border-2 col-4 col-md-5 my-auto"/>
                 </div>
             </div>
             <br/>
