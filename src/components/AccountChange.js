@@ -27,7 +27,7 @@ export default function AccountChange(props) {
                 <p className="h4">Welcome Back!</p>
                 <br/>
                 {isLogin ? <Login/> : <Signup/>}
-                <div className="mb-3 w-75 mx-auto text-center">
+                <div className="mb-3 mt-0 w-75 mx-auto text-center">
                     <a className="link-underline link-offset-3 link-underline-opacity-0 link-underline-opacity-100-hover h6"
                        onClick={
                            function () {

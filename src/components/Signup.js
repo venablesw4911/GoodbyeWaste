@@ -1,18 +1,80 @@
+import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
+
 export default function Signup(props) {
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [passwordConfirm, setPasswordConfirm] = useState("")
+    const [error, setError] = useState("")
+
+    const navigate = useNavigate()
+        
+    const onButtonClick = () => {
+        
+        setError("");
+
+        if ("" === email) {
+            setError("Please enter your email")
+            return
+        }
+
+        if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+            setError("Please enter a valid email")
+            return
+        }
+
+        if ("" === password) {
+            setError("Please enter a password")
+            return
+        }
+
+        if (password.length < 10 || !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d][A-Za-z\d!@#$%^&*()_+]{7,19}$/.test([password])) {
+            setError("The password must be 10 characters or longer, as well as contain an upper and lower case letter, a number, and a special character")
+            return
+        }
+        if (passwordConfirm !== password) {
+            setError("Passwords have to match")
+            return
+        }
+
+        //will replace this with actual login
+        console.log(JSON.stringify({ email, password }))
+    }
+
     return (
         <form className="container">
             <div className="height-row mb-3 w-75 mx-auto">
-                <input type="email" className="form-control" id="email" placeholder="Email/Username"/>
+            <input 
+                    type="email" 
+                    className="form-control" 
+                    id="email" 
+                    placeholder="Email/Username"
+                    onChange={ev => setEmail(ev.target.value)}/>
             </div>
             <div className="height-row mb-3 w-75 mx-auto">
-                <input type="password" className="form-control" id="password" placeholder="Password"/>
+                <input 
+                    type="password" 
+                    className="form-control" 
+                    id="password" 
+                    placeholder="Password"
+                    onChange={ev => setPassword(ev.target.value)}/>
             </div>
             <div className="height-row mb-3 w-75 mx-auto">
-                <input type="password" className="form-control" id="password-confirm" placeholder="Confirm Password"/>
+                <input
+                    type="password" 
+                    className="form-control" 
+                    id="password-confirm" 
+                    placeholder="Confirm password"
+                    onChange={ev => setPasswordConfirm(ev.target.value)}/>
             </div>
             <div className="height-row mb-3 w-75 mx-auto">
-                <button className="button-action bg-action text-white form-control">Sign up</button>
+            <input 
+                className="button-action bg-action text-white form-control"
+                type="button"
+                onClick={onButtonClick}
+                value={"Sign up"}/>
             </div>
+            <p className="height-row mb-3 mx-auto text-danger">{error}</p>
             <div className="container-fluid w-75">
                 <div className="row">
                     <hr className="border-2 col-5 my-auto"/>
@@ -21,7 +83,7 @@ export default function Signup(props) {
                 </div>
             </div>
             <br/>
-            <div className="mb-3 w-75 mx-auto">
+            <div className="mb-1 w-75 mx-auto">
                 <button className="button-google text-primary form-control">
                     <img className="me-3" src={require("../assets/Google-Logo.png")} alt="Google Logo"/>
                     Sign up with Google

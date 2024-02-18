@@ -1,6 +1,44 @@
-import {Link} from "react-router-dom";
+import {Link, useNavigate } from "react-router-dom";
+import React, {useState, useEffect} from "react"
 
 export default function Header(props) {
+    const [loggedIn, setLoggedIn] = useState(false)
+    const [email, setEmail] = useState('')
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        // Fetch the user email and token from local storage
+        const user = JSON.parse(localStorage.getItem('user'))
+      
+        // If the token/email does not exist, mark the user as logged out
+        if (!user || !user.token) {
+          setLoggedIn(false)
+          return
+        }
+      
+        // If the token exists, verify it with the auth server to see if it is valid
+        fetch('http://localhost:3080/verify', {
+          method: 'POST',
+          headers: {
+            'jwt-token': user.token,
+          },
+        })
+          .then((r) => r.json())
+          .then((r) => {
+            setLoggedIn('success' === r.message)
+            setEmail(user.email || '')
+          })
+      }, [])
+
+      const onButtonClick = () => {
+        if (loggedIn) {
+          localStorage.removeItem('user')
+          props.setLoggedIn(false)
+        } else {
+          navigate('/login')
+        }
+      }
+
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-primary col-12 fixed-top header" role="navigation">
             <div className="container">
@@ -32,12 +70,14 @@ export default function Header(props) {
                         </form>
                         <ul className="navbar-nav me-auto col-12 col-md-4">
                             <li className="nav-item my-auto ms-md-auto">
-                                <Link
-                                    className="h5 link-underline link-offset-3 link-underline-opacity-0 link-underline-opacity-100-hover text-primary p-3"
-                                    to="/login"
-                                >
-                                    Log In
-                                </Link>
+                                <div className={'buttonContainer'}>
+                                    <input
+                                    className={'inputButton'}
+                                    type="button"
+                                    onClick={onButtonClick}
+                                    value={loggedIn ? 'Log out' : 'Log in'}
+                                    />
+                                </div>
                             </li>
                         </ul>
                     </div>

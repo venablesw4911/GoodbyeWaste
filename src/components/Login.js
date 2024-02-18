@@ -1,39 +1,83 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export default function Login(props) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [emailError, setEmailError] = useState("")
-    const [passwordError, setPasswordError] = useState("")
-    
-    const navigate = useNavigate();
+    const [error, setError] = useState("")
+
+    const navigate = useNavigate()
         
     const onButtonClick = () => {
         
-        setEmailError("");
-        setPasswordError("")
+        setError("");
 
         if ("" === email) {
-            setEmailError("Please enter your email")
+            setError("Please enter your email")
             return
         }
 
         if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-            setEmailError("Please enter a valid email")
+            setError("Please enter a valid email")
             return
         }
 
         if ("" === password) {
-            setPasswordError("Please enter your password")
+            setError("Please enter your password")
             return
         }
+        logIn()
+    // Check if email has an account associated with it
+    // checkAccountExists((accountExists) => {
+    //     // If yes, log in
+    //     if (accountExists) logIn()
+    //     // Else, ask user if they want to create a new account and if yes, then log in
+    //     else if (
+    //         window.confirm(
+    //         'An account does not exist with this email address: ' + email + '. Do you want to create a new account?',
+    //         )
+    //     ) { logIn() }
+    // })
+}
 
-        if (password.length < 10 || !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d][A-Za-z\d!@#$%^&*()_+]{7,19}$/.test([password])) {
-            setPasswordError("The password must be 10 characters or longer")
-            return
-        }
-    }
+    // Call the server API to check if the given email ID already exists
+// const checkAccountExists = (callback) => {
+//     fetch('http://localhost:3080/check-account', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({ email }),
+//     })
+//       .then((r) => r.json())
+//       .then((r) => {
+//         callback(r?.userExists)
+//       })
+//   }
+  
+  // Log in a user using email and password
+  const logIn = () => {
+    console.log(JSON.stringify({ email, password }))
+    //this will send to the auth server
+    // fetch('http://localhost:3080/auth', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({ email, password }),
+    // })
+    //   .then((r) => r.json())
+    //   .then((r) => {
+    //     if ('success' === r.message) {
+    //       localStorage.setItem('user', JSON.stringify({ email, token: r.token }))
+    //       props.setLoggedIn(true)
+    //       props.setEmail(email)
+    //       navigate('App.js')
+    //     } else {
+    //       window.alert('Wrong email or password')
+    //     }
+    //   })
+  }
 
     return (
         <form className="container">
@@ -44,7 +88,6 @@ export default function Login(props) {
                     id="email" 
                     placeholder="Email/Username"
                     onChange={ev => setEmail(ev.target.value)}/>
-                <label className="height-row mb-3 w-75 mx-auto">{emailError}</label>
             </div>
             <div className="height-row mb-3 w-75 mx-auto">
                 <input 
@@ -53,15 +96,15 @@ export default function Login(props) {
                     id="password" 
                     placeholder="Password"
                     onChange={ev => setPassword(ev.target.value)}/>
-                <label className="height-row mb-3 w-75 mx-auto">{passwordError}</label>
             </div>
-            <div className="height-row mb-3 w-75 mx-auto">
+            <div className="height-row mb-2 w-75 mx-auto">
                 <input 
                 className="button-action bg-action text-white form-control"
                 type="button"
                 onClick={onButtonClick}
                 value={"Log in"}/>
             </div>
+            <p className="height-row my-0 mx-auto text-danger">{error}</p>
             <div className="height-row mb-3 w-75 mx-auto text-start row">
                 <div className="col-md-6">
                     <input className="me-3" type="checkbox" id="remember" name="remember"/>
