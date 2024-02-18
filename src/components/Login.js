@@ -2,14 +2,16 @@ import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 export default function Login(props) {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+    let email;
+    let password;
     const [error, setError] = useState("")
 
     const navigate = useNavigate()
         
     const onButtonClick = () => {
         
+        email = document.getElementsByID("email").value
+        password = document.getElementsByID("password").value
         setError("");
 
         if ("" === email) {
@@ -86,16 +88,14 @@ export default function Login(props) {
                     type="email" 
                     className="form-control" 
                     id="email" 
-                    placeholder="Email/Username"
-                    onChange={ev => setEmail(ev.target.value)}/>
+                    placeholder="Email"/>
             </div>
             <div className="height-row mb-3 w-75 mx-auto">
                 <input 
                     type="password" 
                     className="form-control" 
                     id="password" 
-                    placeholder="Password"
-                    onChange={ev => setPassword(ev.target.value)}/>
+                    placeholder="Password"/>
             </div>
             <div className="height-row mb-2 w-75 mx-auto">
                 <input 

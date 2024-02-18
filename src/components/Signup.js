@@ -2,15 +2,18 @@ import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 export default function Signup(props) {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [passwordConfirm, setPasswordConfirm] = useState("")
+    let email
+    let password
+    let passwordConfirm
     const [error, setError] = useState("")
 
     const navigate = useNavigate()
         
     const onButtonClick = () => {
         
+        email = document.getElementsByID("email").value
+        password = document.getElementsByID("password").value
+        passwordConfirm = document.getElementsByID("password-confirm").value
         setError("");
 
         if ("" === email) {
@@ -48,24 +51,21 @@ export default function Signup(props) {
                     type="email" 
                     className="form-control" 
                     id="email" 
-                    placeholder="Email/Username"
-                    onChange={ev => setEmail(ev.target.value)}/>
+                    placeholder="Email"/>
             </div>
             <div className="height-row mb-3 w-75 mx-auto">
                 <input 
                     type="password" 
                     className="form-control" 
                     id="password" 
-                    placeholder="Password"
-                    onChange={ev => setPassword(ev.target.value)}/>
+                    placeholder="Password"/>
             </div>
             <div className="height-row mb-3 w-75 mx-auto">
                 <input
                     type="password" 
                     className="form-control" 
                     id="password-confirm" 
-                    placeholder="Confirm password"
-                    onChange={ev => setPasswordConfirm(ev.target.value)}/>
+                    placeholder="Confirm password"/>
             </div>
             <div className="height-row mb-3 w-75 mx-auto">
             <input 
