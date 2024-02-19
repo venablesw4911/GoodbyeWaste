@@ -8,10 +8,11 @@ export default function Login(props) {
 
     const navigate = useNavigate()
         
-    const onButtonClick = () => {
+    const handleSubmit = (event) => {
         
-        email = document.getElementsByID("email").value
-        password = document.getElementsByID("password").value
+        event.preventDefault()
+        email = event.target.email.value
+        password = event.target.password.value
         setError("");
 
         if ("" === email) {
@@ -59,7 +60,8 @@ export default function Login(props) {
   
   // Log in a user using email and password
   const logIn = () => {
-    console.log(JSON.stringify({ email, password }))
+    console.log(email)
+    console.log(password)
     //this will send to the auth server
     // fetch('http://localhost:3080/auth', {
     //   method: 'POST',
@@ -82,7 +84,7 @@ export default function Login(props) {
   }
 
     return (
-        <form className="container">
+        <form className="container" onSubmit={handleSubmit}>
             <div className="height-row mb-3 w-75 mx-auto">
                 <input 
                     type="email" 
@@ -98,11 +100,9 @@ export default function Login(props) {
                     placeholder="Password"/>
             </div>
             <div className="height-row mb-2 w-75 mx-auto">
-                <input 
+                <button 
                 className="button-action bg-action text-white form-control"
-                type="button"
-                onClick={onButtonClick}
-                value={"Log in"}/>
+                type="submit">Log In</button>
             </div>
             <p className="height-row my-0 mx-auto text-danger">{error}</p>
             <div className="height-row mb-3 w-75 mx-auto text-start row">
