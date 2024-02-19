@@ -74,8 +74,8 @@ export default function Header(props) {
                                     <input
                                     className={'inputButton'}
                                     type="button"
-                                    onClick={onButtonClick}
-                                    value={loggedIn ? 'Log out' : 'Log in'}
+                                    //onClick={onButtonClick}
+                                    value={/*loggedIn ? 'Log out' : */'Log in'}
                                     />
                                 </div>
                             </li>
