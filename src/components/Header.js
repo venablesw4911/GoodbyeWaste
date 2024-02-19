@@ -5,11 +5,27 @@ export default function Header(props) {
     const [loggedIn, setLoggedIn] = useState(false)
     const [email, setEmail] = useState('')
     const navigate = useNavigate()
+    const [text, setText] = useState();
+    const [searchResult, setSearchResult] = useState();
+
+    const handleSubmit = () => {
+        fetch(`https://api.edamam.com/search?q==${text}&app_id=ed3e6094&app_key=065fd89494e23e47cceae33090cf274d`)
+            .then((response) => response.json())
+            .then((data) => displayFoods2(data));   //setSearchResult(data));
+
+        const displayFoods2 = foods => {
+            console.log(foods);
+            foods.hits.forEach(recipe => {
+                console.log(`${recipe.recipe.label}`);
+
+            });
+        }
+    };
 
     useEffect(() => {
         // Fetch the user email and token from local storage
         const user = JSON.parse(localStorage.getItem('user'))
-      
+
         // If the token/email does not exist, mark the user as logged out
         if (!user || !user.token) {
           setLoggedIn(false)
@@ -28,16 +44,16 @@ export default function Header(props) {
             setLoggedIn('success' === r.message)
             setEmail(user.email || '')
           })
-      }, [])
+    }, [])
 
-      const onButtonClick = () => {
+    const onButtonClick = e => {
         if (loggedIn) {
           localStorage.removeItem('user')
           props.setLoggedIn(false)
         } else {
           navigate('/login')
         }
-      }
+    }
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-primary col-12 fixed-top header" role="navigation">
@@ -60,10 +76,10 @@ export default function Header(props) {
                             <ul className="nav h-100">
                                 <li className="nav-item my-auto mx-md-auto col-9">
                                     <input className="form-control mr-sm-2" type="search" placeholder="Search"
-                                           aria-label="Search"/>
+                                           aria-label="Search" onChange={(event) => setText(event.target.value)}/>
                                 </li>
                                 <li className="nav-item my-auto mx-md-auto col-3">
-                                    <button className="btn btn-outline-dark" type="submit">Search
+                                    <button className="btn btn-outline-dark" type="button" onClick={handleSubmit}>Search
                                     </button>
                                 </li>
                             </ul>
