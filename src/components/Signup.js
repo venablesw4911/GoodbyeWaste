@@ -9,11 +9,12 @@ export default function Signup(props) {
 
     const navigate = useNavigate()
         
-    const onButtonClick = () => {
+    const handleSubmit = (event) => {
         
-        email = document.getElementsByID("email").value
-        password = document.getElementsByID("password").value
-        passwordConfirm = document.getElementsByID("password-confirm").value
+        event.preventDefault()
+        email = event.target.email.value
+        password = event.target.password.value
+        passwordConfirm = event.target.passwordConfirm.value
         setError("");
 
         if ("" === email) {
@@ -41,11 +42,13 @@ export default function Signup(props) {
         }
 
         //will replace this with actual login
-        console.log(JSON.stringify({ email, password }))
+        console.log(email)
+        console.log(password)
+        console.log(passwordConfirm)
     }
 
     return (
-        <form className="container">
+        <form className="container" onSubmit={handleSubmit}>
             <div className="height-row mb-3 w-75 mx-auto">
             <input 
                     type="email" 
@@ -64,15 +67,13 @@ export default function Signup(props) {
                 <input
                     type="password" 
                     className="form-control" 
-                    id="password-confirm" 
+                    id="passwordConfirm" 
                     placeholder="Confirm password"/>
             </div>
             <div className="height-row mb-3 w-75 mx-auto">
-            <input 
+            <button 
                 className="button-action bg-action text-white form-control"
-                type="button"
-                onClick={onButtonClick}
-                value={"Sign up"}/>
+                type="submit">Create Account</button>
             </div>
             <p className="height-row mb-3 mx-auto text-danger">{error}</p>
             <div className="container-fluid w-75">

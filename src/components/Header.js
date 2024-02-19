@@ -2,6 +2,7 @@ import {Link, useNavigate } from "react-router-dom";
 import React, {useState, useEffect} from "react"
 
 export default function Header(props) {
+
     const [loggedIn, setLoggedIn] = useState(false)
     const [email, setEmail] = useState('')
     const navigate = useNavigate()
@@ -90,8 +91,8 @@ export default function Header(props) {
                                     <input
                                     className={'inputButton'}
                                     type="button"
-                                    onClick={onButtonClick}
-                                    value={loggedIn ? 'Log out' : 'Log in'}
+                                    //onClick={onButtonClick}
+                                    value={/*loggedIn ? 'Log out' : */'Log in'}
                                     />
                                 </div>
                             </li>
