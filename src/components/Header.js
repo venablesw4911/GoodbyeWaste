@@ -17,7 +17,7 @@ export default function Header(props) {
             console.log(foods);
             foods.hits.forEach(recipe => {
                 console.log(`${recipe.recipe.label}`);
-
+                console.dir(recipe.recipe);
             });
         }
     };
