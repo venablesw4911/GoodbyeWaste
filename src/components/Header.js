@@ -1,3 +1,4 @@
+import Search from "./Search";
 import {Link, useNavigate } from "react-router-dom";
 import React, {useState, useEffect} from "react"
 
@@ -63,14 +64,18 @@ export default function Header(props) {
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                <div className="collapse navbar-collapse" id="navbarNav">
+                <Search hideOnLarge={true}/>
+                <div className="bg-primary pb-3 collapse navbar-collapse" id="navbarNav">
                     <div className="row w-100">
                         <ul className="navbar-nav me-auto col-12 col-md-4">
                             <li className="d-none d-md-block nav-item my-auto">
-                                <img src="/favicon.ico"/>
+                                <img alt="GoodbyeWaste logo" src="/favicon.ico"/>
                             </li>
-                            <li className="nav-item my-auto">
+                            <li className="d-none d-md-block nav-item my-auto">
                                 <Link className="nav-link text-primary navbar-brand p-3" to="/">GoodbyeWaste</Link>
+                            </li>
+                            <li className="d-block d-md-none nav-item my-auto">
+                                <Link className="nav-link text-primary navbar-brand p-3" to="/">Home</Link>
                             </li>
                         </ul>
                         <form className="form-inline col-12 col-md-4">

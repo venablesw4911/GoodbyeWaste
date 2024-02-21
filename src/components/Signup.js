@@ -78,9 +78,9 @@ export default function Signup(props) {
             <p className="height-row mb-3 mx-auto text-danger">{error}</p>
             <div className="container-fluid w-75">
                 <div className="row">
-                    <hr className="border-2 col-5 my-auto"/>
-                    <p className="col-2 my-auto">OR</p>
-                    <hr className="border-2 col-5 my-auto"/>
+                    <hr className="border-2 col-4 col-md-5 my-auto"/>
+                    <p className="col-4 col-md-2 my-auto">OR</p>
+                    <hr className="border-2 col-4 col-md-5 my-auto"/>
                 </div>
             </div>
             <br/>
