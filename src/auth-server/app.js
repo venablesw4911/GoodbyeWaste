@@ -1,10 +1,10 @@
-const express = require('express')
-const bcrypt = require('bcrypt')
-var cors = require('cors')
-const jwt = require('jsonwebtoken')
-var low = require('lowdb')
-var FileSync = require('lowdb/adapters/FileSync')
-var adapter = new FileSync('./database.json')
+import fs from 'fs'
+import express from 'express'
+import bcrypt from 'bcrypt'
+import cors from 'cors'
+import jwt  from 'jsonwebtoken'
+var low = import('lowdb')
+var adapter = fs('./database.json')
 var db = low(adapter)
 
 // Initialize Express app
@@ -102,4 +102,4 @@ app.post('/check-account', (req, res) => {
     })
   })
 
-  app.listen(3080)
+  app.listen(3081)

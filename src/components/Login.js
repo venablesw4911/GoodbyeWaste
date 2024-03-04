@@ -29,59 +29,53 @@ export default function Login(props) {
             setError("Please enter your password")
             return
         }
-        logIn()
-    // Check if email has an account associated with it
-    // checkAccountExists((accountExists) => {
-    //     // If yes, log in
-    //     if (accountExists) logIn()
-    //     // Else, ask user if they want to create a new account and if yes, then log in
-    //     else if (
-    //         window.confirm(
-    //         'An account does not exist with this email address: ' + email + '. Do you want to create a new account?',
-    //         )
-    //     ) { logIn() }
-    // })
-}
+        //logIn()
+        //Check if email has an account associated with it
+        checkAccountExists((accountExists) => {
+            // If yes, log in
+            if (accountExists) logIn()
+            // Else, ask user if they want to create a new account and if yes, then log in
+            else if (window.confirm(
+                'An account does not exist with this email address: ' + email + '. Do you want to create a new account?',
+            )) { logIn() }
+        })
+    }
 
     // Call the server API to check if the given email ID already exists
-// const checkAccountExists = (callback) => {
-//     fetch('http://localhost:3080/check-account', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ email }),
-//     })
-//       .then((r) => r.json())
-//       .then((r) => {
-//         callback(r?.userExists)
-//       })
-//   }
+    const checkAccountExists = (callback) => {
+    fetch('http://localhost:3081/check-account', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json',},
+      body: JSON.stringify({ email }),
+    })
+      .then((r) => r.json())
+      .then((r) => {
+        callback(r?.userExists)
+      })
+    }
   
-  // Log in a user using email and password
-  const logIn = () => {
-    console.log(email)
-    console.log(password)
+    // Log in a user using email and password
+    const logIn = () => {
+    //console.log(email)
+    //console.log(password)
     //this will send to the auth server
-    // fetch('http://localhost:3080/auth', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({ email, password }),
-    // })
-    //   .then((r) => r.json())
-    //   .then((r) => {
-    //     if ('success' === r.message) {
-    //       localStorage.setItem('user', JSON.stringify({ email, token: r.token }))
-    //       props.setLoggedIn(true)
-    //       props.setEmail(email)
-    //       navigate('App.js')
-    //     } else {
-    //       window.alert('Wrong email or password')
-    //     }
-    //   })
-  }
+        fetch('http://localhost:3081/auth', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json',},
+            body: JSON.stringify({ email, password }),
+        })
+        .then((r) => r.json())
+        .then((r) => {
+            if ('success' === r.message) {
+                localStorage.setItem('user', JSON.stringify({ email, token: r.token }))
+                props.setLoggedIn(true)
+                props.setEmail(email)
+                navigate('App.js')
+            } else {
+                window.alert('Wrong email or password')
+            }
+        })
+    }
 
     return (
         <form className="container" onSubmit={handleSubmit}>
@@ -108,7 +102,7 @@ export default function Login(props) {
             <div className="height-row mb-3 w-75 mx-auto text-start row">
                 <div className="col-md-6 text-center text-md-start">
                     <input className="me-md-3" type="checkbox" id="remember" name="remember"/>
-                    <label className="h6" htmlFor="remember">Remember Password</label>
+                    <label className="h6" htmlFor="remember">Remember Username</label>
                 </div>
                 <div className="col-md-6 text-center">
                     <a className="link-underline link-offset-3 link-underline-opacity-0 link-underline-opacity-100-hover float-md-end h6">
