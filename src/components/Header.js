@@ -35,7 +35,7 @@ export default function Header(props) {
         }
       
         // If the token exists, verify it with the auth server to see if it is valid
-        fetch('http://localhost:3080/verify', {
+        fetch('http://localhost:3081/verify', {
           method: 'POST',
           headers: {
             'jwt-token': user.token,
@@ -94,9 +94,9 @@ export default function Header(props) {
                             <li className="nav-item my-auto ms-md-auto">
                                 <div className={'buttonContainer'}>
                                     <input
-                                    className={'inputButton'}
+                                    className={'button-action bg-action text-white form-control'}
                                     type="button"
-                                    //onClick={onButtonClick}
+                                    onClick={onButtonClick}
                                     value={/*loggedIn ? 'Log out' : */'Log in'}
                                     />
                                 </div>
