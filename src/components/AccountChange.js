@@ -1,8 +1,8 @@
 import {useState} from "react";
 import {motion} from "framer-motion";
 import splash from "../assets/Login-Splash.webp"
-import Login from "./Login";
-import Signup from "./Signup";
+import Login from "./Login.js";
+import Signup from "./Signup.js";
 
 export default function AccountChange(props) {
     const [isLogin, setIsLogin] = useState(true);

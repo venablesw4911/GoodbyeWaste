@@ -1,6 +1,6 @@
 import {Route, Routes, useLocation} from "react-router-dom";
-import Landing from "./Landing";
-import AccountChange from "./AccountChange";
+import Landing from "./Landing.js";
+import AccountChange from "./AccountChange.js";
 
 import {AnimatePresence} from "framer-motion"
 

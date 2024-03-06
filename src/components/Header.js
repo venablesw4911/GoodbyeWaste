@@ -1,4 +1,4 @@
-import Search from "./Search";
+import Search from "./Search.js";
 import {Link, useNavigate } from "react-router-dom";
 import React, {useState, useEffect} from "react"
 
