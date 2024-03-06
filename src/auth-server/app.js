@@ -84,22 +84,36 @@ app.post('/verify', (req, res) => {
   })
 
 // An endpoint to see if there's an existing account for a given email address
-app.post('/check-account', (req, res) => {
-    const { email } = req.body
-  
+app.post('/check-account', async (req, res) => {
+    const { userEmail } = req.body
+    const collection = await db.collection("user")
+    const query = {userEmail}
+    const result = await collection.findOne(query)
     console.log(req.body)
-  
+    console.log(result)
+    if (!result) {
+      console.log("not found in app.js")
+      res.send("Not found").status(404)
+    }
+    else {
+      console.log("found in app.js")
+      res.send(result).status(200)
+    }
+
+   
+    /*
     const user = db
       .get('users')
       .value()
-      .filter((user) => email === user.email)
-  
+      .filter((user) => userEmail === user.email)
+   
     console.log(user)
   
     res.status(200).json({
       status: user.length === 1 ? 'User exists' : 'User does not exist',
       userExists: user.length === 1,
     })
+    */
   })
 
   app.listen(3081)

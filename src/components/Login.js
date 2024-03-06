@@ -31,27 +31,31 @@ export default function Login(props) {
         }
         //logIn()
         //Check if email has an account associated with it
-        checkAccountExists((accountExists) => {
-            // If yes, log in
-            if (accountExists) logIn()
-            // Else, ask user if they want to create a new account and if yes, then log in
-            else if (window.confirm(
-                'An account does not exist with this email address: ' + email + '. Do you want to create a new account?',
-            )) { logIn() }
-        })
+        if(checkAccountExists) {
+            console.log("were about to log in")
+            logIn()
+        } else if(window.confirm(
+            'An account does not exist with this email address: ' + email + '. Do you want to create a new account?',
+        )) {
+            //page reroute to sign up
+        }
     }
 
     // Call the server API to check if the given email ID already exists
-    const checkAccountExists = (callback) => {
-    fetch('http://localhost:3081/check-account', {
+    const checkAccountExists = async () => {
+    
+    const response = await fetch('http://localhost:3081/check-account', {
       method: 'POST',
       headers: {'Content-Type': 'application/json',},
       body: JSON.stringify({ email }),
     })
-      .then((r) => r.json())
-      .then((r) => {
-        callback(r?.userExists)
-      })
+    if (response.status === 200) {
+        return true
+    }
+    else {
+        return false
+    }
+
     }
   
     // Log in a user using email and password
@@ -120,7 +124,7 @@ export default function Login(props) {
             <br/>
             <div className="mb-3 w-75 mx-auto">
                 <button className="button-google text-primary form-control">
-                    <img className="me-3" src={require("../assets/Google-Logo.png")} alt="Google Logo"/>
+                    <img className="me-3" src={("../assets/Google-Logo.png")} alt="Google Logo"/>
                     Sign in with Google
                 </button>
             </div>
