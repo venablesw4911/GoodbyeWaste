@@ -3,9 +3,9 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import cors from 'cors'
 import jwt  from 'jsonwebtoken'
-var low = import('lowdb')
-var adapter = fs('./database.json')
-var db = low(adapter)
+import db from './connect-db.js'
+//var low = import('lowdb')
+//var adapter = fs('./database.json')
 
 // Initialize Express app
 const app = express()
