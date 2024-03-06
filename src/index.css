@@ -44,6 +44,11 @@ a {
     height: 5rem;
 }
 
+.headerIMG {
+    height: 30px;
+    width: 30px;
+}
+
 .login-box {
     margin-top: 2.5rem;
 }
@@ -51,6 +56,10 @@ a {
 .login-splash {
     width: 100%;
     transform: translateX(-50px);
+}
+
+.offcanvas {
+    width: 250px !important;
 }
 
 .height-row {
