@@ -2,21 +2,23 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 
 const connectionString = `mongodb+srv://goodbyeWasteMain:sharkRadarRIP@goodbyewastedb.yduuwag.mongodb.net/`;
 const client = new MongoClient(connectionString, {
-	serverApi: {
-		version: ServerApiVersion.v1,
-		deprecationErrors: true
-	}
+    serverApi: {
+        version: ServerApiVersion.v1,
+        deprecationErrors: true
+    }
 });
 
-let connection = null;
-
-try {
-	connection = await client.connect();
-	
-} catch (err) {
-	console.error(err);
+async function connectToDatabase() {
+    try {
+        await client.connect();
+        //console.log("Connected to MongoDB Atlas");
+        return client.db("gwDB");
+    } catch (err) {
+        console.error("Error connecting to MongoDB Atlas:", err);
+        return null;
+    }
 }
 
-const db = connection?.db("gwDB") ?? null;
+const db = await connectToDatabase();
 
 export default db;
