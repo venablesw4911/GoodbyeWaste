@@ -3,9 +3,9 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import cors from 'cors'
 import jwt  from 'jsonwebtoken'
-var low = import('lowdb')
-var adapter = fs('./database.json')
-var db = low(adapter)
+import db from './connect-db.js'
+//var low = import('lowdb')
+//var adapter = fs('./database.json')
 
 // Initialize Express app
 const app = express()
@@ -84,22 +84,88 @@ app.post('/verify', (req, res) => {
   })
 
 // An endpoint to see if there's an existing account for a given email address
-app.post('/check-account', (req, res) => {
-    const { email } = req.body
-  
+app.post('/check-account', async (req, res) => {
+    const { userEmail } = req.body
+    const collection = await db.collection("user")
+    const query = {userEmail}
+    const result = await collection.findOne(query)
     console.log(req.body)
-  
+    console.log(result)
+    if (!result) {
+      console.log("not found in app.js")
+      res.send("Not found").status(404)
+    }
+    else {
+      console.log("found in app.js")
+      res.send(result).status(200)
+    }
+
+   
+    /*
     const user = db
       .get('users')
       .value()
-      .filter((user) => email === user.email)
-  
+      .filter((user) => userEmail === user.email)
+   
     console.log(user)
   
     res.status(200).json({
       status: user.length === 1 ? 'User exists' : 'User does not exist',
       userExists: user.length === 1,
     })
+    */
   })
+
+  app.post('/pantry-insert', async (req, res) => {
+    // Extract data from query parameters
+    let { userID, ingredientID, amount } = req.query;
+
+    userID = parseInt(userID);
+    ingredientID = parseInt(ingredientID);
+    amount = parseInt(amount);
+
+    try {
+        // Check if user exists
+        const userExists = await db.collection("user").findOne({ userID });
+        if (!userExists) {
+            console.log("User does not exist");
+            return res.status(400).json({ error: "User does not exist" });
+        }
+        
+        // Check if ingredient exists
+        // There is no need to do this yet the ingredients have not been implemented
+        /*
+        const ingredientExists = await db.collection("ingredient").findOne({ ingredientID });
+        if (!ingredientExists) {
+            console.log("Ingredient does not exist");
+            return res.status(400).json({ error: "Ingredient does not exist" });
+        }
+        */
+        
+        // Check if userPantry item already exists with same user, ingredient, and amount
+        const existingItem = await db.collection("userPantry").findOne({ userID, ingredientID, amount });
+        if (existingItem) {
+            console.log("Pantry item already exists with the same user, ingredient, and amount");
+            return res.status(400).json({ error: "Pantry item already exists" });
+        }
+        
+        // Check if userPantry item already exists with same user and ingredient but different amount
+        const existingItemWithDifferentAmount = await db.collection("userPantry").findOne({ userID, ingredientID, amount: { $ne: amount } });
+        if (existingItemWithDifferentAmount) {
+            // Update existing item with new amount
+            await db.collection("userPantry").updateOne({ userID, ingredientID }, { $set: { amount } });
+            console.log("Updated existing pantry item with new amount");
+            return res.status(200).json({ message: "Pantry item updated successfully" });
+        }
+        
+        // Add new userPantry item
+        await db.collection("userPantry").insertOne({ userID, ingredientID, amount });
+        console.log("Added new pantry item");
+        return res.status(200).json({ message: "Pantry item submitted successfully" });
+    } catch (error) {
+        console.error("Error while submitting pantry item:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+});
 
   app.listen(3081)
