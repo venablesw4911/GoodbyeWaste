@@ -29,56 +29,29 @@ export default function Login(props) {
             setError("Please enter your password")
             return
         }
-        //logIn()
-        //Check if email has an account associated with it
-        if(checkAccountExists) {
-            console.log("were about to log in")
-            logIn()
-        } else if(window.confirm(
-            'An account does not exist with this email address: ' + email + '. Do you want to create a new account?',
-        )) {
-            //page reroute to sign up
-        }
-    }
-
-    // Call the server API to check if the given email ID already exists
-    const checkAccountExists = async () => {
-    
-    const response = await fetch('http://localhost:3081/check-account', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json',},
-      body: JSON.stringify({ email }),
-    })
-    if (response.status === 200) {
-        return true
-    }
-    else {
-        return false
-    }
-
+        logIn()
     }
   
     // Log in a user using email and password
-    const logIn = () => {
+    const logIn = async () => {
     //console.log(email)
     //console.log(password)
     //this will send to the auth server
-        fetch('http://localhost:3081/auth', {
+        const response = await fetch('http://localhost:3081/auth', {
             method: 'POST',
             headers: {'Content-Type': 'application/json',},
             body: JSON.stringify({ email, password }),
         })
-        .then((r) => r.json())
-        .then((r) => {
-            if ('success' === r.message) {
-                localStorage.setItem('user', JSON.stringify({ email, token: r.token }))
-                props.setLoggedIn(true)
-                props.setEmail(email)
-                navigate('App.js')
-            } else {
-                window.alert('Wrong email or password')
-            }
-        })
+
+        if (response.status === 200) {
+            localStorage.setItem('user', JSON.stringify({ email, token: response.token }))
+            props.setLoggedIn(true)
+            props.setEmail(email)
+            navigate('/')
+        } else {
+            window.alert('Account already exists')
+        }
+        
     }
 
     return (

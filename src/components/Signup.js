@@ -40,54 +40,27 @@ export default function Signup(props) {
             setError("Passwords have to match")
             return
         }
-
-        //will replace this with actual login
-        // console.log(email)
-        // console.log(password)
-        // console.log(passwordConfirm)
-        checkAccountExists((accountExists) => {
-            // If yes, log in
-            if (accountExists) logIn()
-            // Else, ask user if they want to create a new account and if yes, then log in
-            else if (window.confirm(
-                'An account does not exist with this email address: ' + email + '. Do you want to create a new account?',
-            )) { logIn() }
-        })
+        createAccount()
     }
 
-    // Call the server API to check if the given email ID already exists
-    const checkAccountExists = (callback) => {
-        fetch('http://localhost:3081/check-account', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json',},
-          body: JSON.stringify({ email }),
-        })
-          .then((r) => r.json())
-          .then((r) => {
-            callback(r?.userExists)
-        })
-    }
-
-    const logIn = () => {
+    const createAccount = async () => {
         //console.log(email)
         //console.log(password)
         //this will send to the auth server
-        fetch('http://localhost:3081/auth', {
+        const response = await fetch('http://localhost:3081/create-account', {
             method: 'POST',
             headers: {'Content-Type': 'application/json',},
             body: JSON.stringify({ email, password }),
         })
-        .then((r) => r.json())
-        .then((r) => {
-            if ('success' === r.message) {
-                localStorage.setItem('user', JSON.stringify({ email, token: r.token }))
-                props.setLoggedIn(true)
-                props.setEmail(email)
-                navigate('App.js')
-            } else {
-                window.alert('Wrong email or password')
-            }
-        })
+
+        if (response.status === 200) {
+            localStorage.setItem('user', JSON.stringify({ email, token: response.token }))
+            props.setLoggedIn(true)
+            props.setEmail(email)
+            navigate('/')
+        } else {
+            window.alert('Wrong email or password')
+        }
     }
 
     return (
@@ -129,7 +102,7 @@ export default function Signup(props) {
             <br/>
             <div className="mb-1 w-75 mx-auto">
                 <button className="button-google text-primary form-control">
-                    <img className="me-3" src={require("../assets/Google-Logo.png")} alt="Google Logo"/>
+                    <img className="me-3" src={("../assets/Google-Logo.png")} alt="Google Logo"/>
                     Sign up with Google
                 </button>
             </div>
