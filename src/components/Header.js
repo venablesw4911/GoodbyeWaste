@@ -1,11 +1,10 @@
-import Search from "./Search";
+import Search from "./Search.js";
 import {Link, useNavigate } from "react-router-dom";
-import React, {useState, useEffect} from "react"
+import React, {useState} from "react"
 
 export default function Header(props) {
 
-    const [loggedIn, setLoggedIn] = useState(false)
-    const [email, setEmail] = useState('')
+    const { loggedIn, setLoggedIn } = props
     const navigate = useNavigate()
     const [text, setText] = useState();
     const [searchResult, setSearchResult] = useState();
@@ -23,30 +22,6 @@ export default function Header(props) {
             });
         }
     };
-
-    useEffect(() => {
-        // Fetch the user email and token from local storage
-        const user = JSON.parse(localStorage.getItem('user'))
-
-        // If the token/email does not exist, mark the user as logged out
-        if (!user || !user.token) {
-          setLoggedIn(false)
-          return
-        }
-      
-        // If the token exists, verify it with the auth server to see if it is valid
-        fetch('http://localhost:3080/verify', {
-          method: 'POST',
-          headers: {
-            'jwt-token': user.token,
-          },
-        })
-          .then((r) => r.json())
-          .then((r) => {
-            setLoggedIn('success' === r.message)
-            setEmail(user.email || '')
-          })
-    }, [])
 
     const onButtonClick = e => {
         if (loggedIn) {
@@ -94,10 +69,10 @@ export default function Header(props) {
                             <li className="nav-item my-auto ms-md-auto">
                                 <div className={'buttonContainer'}>
                                     <input
-                                    className={'inputButton'}
+                                    className={'button-action bg-action text-white form-control'}
                                     type="button"
-                                    //onClick={onButtonClick}
-                                    value={/*loggedIn ? 'Log out' : */'Log in'}
+                                    onClick={onButtonClick}
+                                    value={loggedIn ? 'Log out' : 'Log in'}
                                     />
                                 </div>
                             </li>
