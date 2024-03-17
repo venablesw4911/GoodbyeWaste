@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 export default function Login(props) {
     let email;
     let password;
+    let isChecked;
     const [error, setError] = useState("")
 
     const navigate = useNavigate()
@@ -13,8 +14,9 @@ export default function Login(props) {
         event.preventDefault()
         email = event.target.email.value
         password = event.target.password.value
+        isChecked = event.target.remember.checked
         setError("");
-
+        //console.log(isChecked)
         if ("" === email) {
             setError("Please enter your email")
             return
@@ -45,6 +47,9 @@ export default function Login(props) {
 
         if (response.status === 200) {
             localStorage.setItem('user', JSON.stringify({ email, token: response.token }))
+            props.setUser(JSON.stringify({ email, token: response.token }))
+            localStorage.setItem('isChecked', isChecked )
+            props.setChecked(isChecked)
             props.setLoggedIn(true)
             props.setEmail(email)
             navigate('/')
@@ -61,7 +66,8 @@ export default function Login(props) {
                     type="email" 
                     className="form-control" 
                     id="email" 
-                    placeholder="Email"/>
+                    placeholder="Email"
+                    value={props.isChecked ? props.email : null}/>
             </div>
             <div className="height-row mb-3 w-75 mx-auto">
                 <input 
@@ -79,7 +85,7 @@ export default function Login(props) {
             <div className="height-row mb-3 w-75 mx-auto text-start row">
                 <div className="col-md-6 text-center text-md-start">
                     <input className="me-md-3" type="checkbox" id="remember" name="remember"/>
-                    <label className="h6" htmlFor="remember">Remember Username</label>
+                    <label className="h6" htmlFor="remember">Remember Email</label>
                 </div>
                 <div className="col-md-6 text-center">
                     <a className="link-underline link-offset-3 link-underline-opacity-0 link-underline-opacity-100-hover float-md-end h6">

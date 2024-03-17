@@ -5,14 +5,14 @@ import AccountChange from "./AccountChange.js";
 import {AnimatePresence} from "framer-motion"
 
 export default function AnimatedRoutes(props) {
-    const { setLoggedIn, setEmail } = props
+    const { setLoggedIn, setEmail, email } = props
     const location = useLocation();
 
     return (
         <AnimatePresence mode="wait" initial={false}>
             <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<Landing/>}/>
-                <Route path="/login" element={<AccountChange setEmail={setEmail} setLoggedIn={setLoggedIn}/>}/>
+                <Route path="/login" element={<AccountChange setUser={props.setUser} setChecked={props.setChecked} isChecked={props.isChecked} email={email} setEmail={setEmail} setLoggedIn={setLoggedIn}/>}/>
             </Routes>
         </AnimatePresence>
     )
