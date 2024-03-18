@@ -1,5 +1,5 @@
 import React from "react"
-import Carousel from 'react-bootstrap/Carousel';
+import Carousel from 'react-bootstrap/esm/Carousel.js';
 import {motion} from "framer-motion";
 import splash from "../assets/Landing-Splash.webp"
 

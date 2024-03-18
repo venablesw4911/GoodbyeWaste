@@ -1,12 +1,11 @@
 import {useState} from "react";
 import {motion} from "framer-motion";
 import splash from "../assets/Login-Splash.webp"
-import Login from "./Login";
-import Signup from "./Signup";
+import Login from "./Login.js";
+import Signup from "./Signup.js";
 
 export default function AccountChange(props) {
-    const [isLogin, setIsLogin] = useState(true);
-
+    const [isLogin, setIsLogin] = useState(true)
     let otherText = isLogin ? "Don't have an account" : "Already have an account";
 
     return (
@@ -26,7 +25,7 @@ export default function AccountChange(props) {
                 <h1 className="fw-bold">GoodbyeWaste</h1>
                 <p className="h4">Welcome Back!</p>
                 <br/>
-                {isLogin ? <Login/> : <Signup/>}
+                {isLogin ? <Login setUser={props.setUser} setChecked={props.setChecked} isChecked={props.isChecked} email={props.email} setLoggedIn={props.setLoggedIn} setEmail={props.setEmail} /> : <Signup setLoggedIn={props.setLoggedIn} setEmail={props.setEmail}/>}
                 <div className="mb-3 mt-0 w-75 mx-auto text-center">
                     <a className="link-underline link-offset-3 link-underline-opacity-0 link-underline-opacity-100-hover h6"
                        onClick={

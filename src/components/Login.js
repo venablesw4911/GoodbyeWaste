@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 export default function Login(props) {
     let email;
     let password;
+    let isChecked;
     const [error, setError] = useState("")
 
     const navigate = useNavigate()
@@ -13,8 +14,9 @@ export default function Login(props) {
         event.preventDefault()
         email = event.target.email.value
         password = event.target.password.value
+        isChecked = event.target.remember.checked
         setError("");
-
+        //console.log(isChecked)
         if ("" === email) {
             setError("Please enter your email")
             return
@@ -30,58 +32,32 @@ export default function Login(props) {
             return
         }
         logIn()
-    // Check if email has an account associated with it
-    // checkAccountExists((accountExists) => {
-    //     // If yes, log in
-    //     if (accountExists) logIn()
-    //     // Else, ask user if they want to create a new account and if yes, then log in
-    //     else if (
-    //         window.confirm(
-    //         'An account does not exist with this email address: ' + email + '. Do you want to create a new account?',
-    //         )
-    //     ) { logIn() }
-    // })
-}
-
-    // Call the server API to check if the given email ID already exists
-// const checkAccountExists = (callback) => {
-//     fetch('http://localhost:3080/check-account', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ email }),
-//     })
-//       .then((r) => r.json())
-//       .then((r) => {
-//         callback(r?.userExists)
-//       })
-//   }
+    }
   
-  // Log in a user using email and password
-  const logIn = () => {
-    console.log(email)
-    console.log(password)
+    // Log in a user using email and password
+    const logIn = async () => {
+    //console.log(email)
+    //console.log(password)
     //this will send to the auth server
-    // fetch('http://localhost:3080/auth', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({ email, password }),
-    // })
-    //   .then((r) => r.json())
-    //   .then((r) => {
-    //     if ('success' === r.message) {
-    //       localStorage.setItem('user', JSON.stringify({ email, token: r.token }))
-    //       props.setLoggedIn(true)
-    //       props.setEmail(email)
-    //       navigate('App.js')
-    //     } else {
-    //       window.alert('Wrong email or password')
-    //     }
-    //   })
-  }
+        const response = await fetch('http://localhost:3081/auth', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json',},
+            body: JSON.stringify({ email, password }),
+        })
+
+        if (response.status === 200) {
+            localStorage.setItem('user', JSON.stringify({ email, token: response.token }))
+            props.setUser(JSON.stringify({ email, token: response.token }))
+            localStorage.setItem('isChecked', isChecked )
+            props.setChecked(isChecked)
+            props.setLoggedIn(true)
+            props.setEmail(email)
+            navigate('/')
+        } else {
+            window.alert('Wrong email or password')
+        }
+        
+    }
 
     return (
         <form className="container" onSubmit={handleSubmit}>
@@ -90,7 +66,8 @@ export default function Login(props) {
                     type="email" 
                     className="form-control" 
                     id="email" 
-                    placeholder="Email"/>
+                    placeholder="Email"
+                    value={props.isChecked ? props.email : null}/>
             </div>
             <div className="height-row mb-3 w-75 mx-auto">
                 <input 
@@ -108,7 +85,7 @@ export default function Login(props) {
             <div className="height-row mb-3 w-75 mx-auto text-start row">
                 <div className="col-md-6 text-center text-md-start">
                     <input className="me-md-3" type="checkbox" id="remember" name="remember"/>
-                    <label className="h6" htmlFor="remember">Remember Password</label>
+                    <label className="h6" htmlFor="remember">Remember Email</label>
                 </div>
                 <div className="col-md-6 text-center">
                     <a className="link-underline link-offset-3 link-underline-opacity-0 link-underline-opacity-100-hover float-md-end h6">
@@ -126,7 +103,7 @@ export default function Login(props) {
             <br/>
             <div className="mb-3 w-75 mx-auto">
                 <button className="button-google text-primary form-control">
-                    <img className="me-3" src={require("../assets/Google-Logo.png")} alt="Google Logo"/>
+                    <img className="me-3" src={("../assets/Google-Logo.png")} alt="Google Logo"/>
                     Sign in with Google
                 </button>
             </div>
