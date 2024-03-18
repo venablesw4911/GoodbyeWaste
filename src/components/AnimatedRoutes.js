@@ -5,8 +5,7 @@ import SearchResults from "./SearchResults";
 
 import {AnimatePresence} from "framer-motion"
 
-export default function AnimatedRoutes(props) {
-    const { searchResults } = props;
+export default function AnimatedRoutes() {
     const location = useLocation();
 
     return (
@@ -14,7 +13,7 @@ export default function AnimatedRoutes(props) {
             <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<Landing/>}/>
                 <Route path="/login" element={<AccountChange/>}/>
-                <Route path="/search" element={<SearchResults search={searchResults}/>}/>
+                <Route path="/search" element={<SearchResults/>}/>
             </Routes>
         </AnimatePresence>
     )

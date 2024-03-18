@@ -2,26 +2,47 @@ import React, { useState, useEffect  } from "react"
 import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as regularHeart} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useLocation } from "react-router-dom";
+import {forEach} from "react-bootstrap/ElementChildren";
 
 export default function SearchResults(props) {
-    const { search } = props;
-    const [searchText, setSearchText] = useState(search)
+    const location = useLocation();
+    const [search, setSearch] = useState("");
+
     const [searchResult, setSearchResult] = useState(null); // State to store the fetched data
 
     useEffect(() => {
-        const fetchSearchResults = async () => {
-            try {
-                const response = await fetch(`https://api.edamam.com/search?q=${search}&app_id=ed3e6094&app_key=065fd89494e23e47cceae33090cf274d`);
-                const data = await response.json();
-                setSearchResult(data); // Store the fetched data in state
-                console.log(data)
-            } catch (error) {
-                console.error('Error fetching search results:', error);
-            }
-        };
+        const params = new URLSearchParams(location.search);
+        const searchQuery = params.get("search");
+        const dietFilter = params.get("diet");
+        const healthFilters = params.get("health");
+        let searchFilters = '';
 
-        fetchSearchResults();
-    }, []); // Fetch data whenever the 'search' prop changes
+        if (dietFilter) {
+            searchFilters += '&diet='+dietFilter;
+        }
+        if (healthFilters) {
+            healthFilters.split(',').forEach(function(healthFilter) {
+                searchFilters += `&health=${healthFilter}`;
+            });
+        }
+
+        fetchSearchResults(searchQuery, searchFilters);
+
+        setSearch(searchQuery);
+        // Call your API with searchQuery
+    }, [location.search]);
+
+    const fetchSearchResults = async (query, filters) => {
+        try {
+            const response = await fetch(`https://api.edamam.com/search?q=${query}&app_id=ed3e6094&app_key=065fd89494e23e47cceae33090cf274d${filters}`);
+            const data = await response.json();
+            setSearchResult(data); // Store the fetched data in state
+            console.log(data)
+        } catch (error) {
+            console.error('Error fetching search results:', error);
+        }
+    };
 
     function extractString(url) {
         const match = url.match(/\/\/(.*?)\.com/);
