@@ -1,35 +1,39 @@
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import React, {useState, useEffect} from "react"
 
-// get our fontawesome imports
-import { faMagnifyingGlass, faBasketShopping, faCalendarDay, faUser, faHouse, faRightFromBracket, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+// Fontawesome imports
+import { faMagnifyingGlass, faBasketShopping, faCalendarDay, faUser, faHouse, faRightFromBracket, faCircleInfo, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const allergies = ['Celery-Free', 'Crustacean-Free', 'Dairy-Free', 'Egg-Free', 'Fish-Free', 'Gluten-Free', 'Lupine-Free', 'Mustard-Free', 'Peanut-Free', 'Sesame-Free', 'Shellfish-Free', 'Soy-Free', 'Tree-Nut-Free', 'Wheat-Free'];
 const health = ['Vegetarian', 'Vegan', 'Pork-Free', 'Red-Meat-Free', 'Keto-Friendly', 'Kosher', 'Low-sugar', 'Paleo', 'Pescatarian'];
 const diets = ['High-Fiber', 'Balanced', 'High-Protein', 'Low-Carb', 'Low-Fat', 'Low-Sodium'];
+const macroNutrients = ['Fat', 'Saturated', 'Trans', 'Monounsaturated', 'Polyunsaturated', 'Carbs', 'Fiber', 'Sugars', 'Protein'];
+const microNutrients = ['Cholesterol', 'Sodium', 'Calcium', 'Magnesium', 'Postassium', 'Iron', 'Vitamin A', 'Vitamin C', 'Thiamin (B1)', 'Riboflavin (B2)', 'Niacin (B3)', 'Vitamin B12', 'Vitamin D', 'Vitamin E', 'Vitamin K'];
 
 export default function Header(props) {
     const location = useLocation();
-    const [collapseOpen, setCollapseOpen] = useState(false);
+    const navigate = useNavigate()
 
     const [loggedIn, setLoggedIn] = useState(false)
     const [email, setEmail] = useState('')
 
-    const navigate = useNavigate()
     const [searchText, setSearchText] = useState('');
     const [searchDiet, setSearchDiet] = useState('');
     const [searchHealth, setSearchHealth] = useState([]);
+    const [showSearchFilters, setShowSearchFilters] = useState(false);
 
+    // On change of location, hide search filters collapse
     useEffect(() => {
-        setCollapseOpen(false); // Close the navigation panel
+        setShowSearchFilters(false); // Close the navigation panel
     }, [ location ]);
 
-    // Toggle collapse state
+    // Toggle search filter collapse state
     const toggleCollapse = () => {
-        setCollapseOpen(!collapseOpen);
+        setShowSearchFilters(!showSearchFilters);
     };
 
+    // On submit of search form, send search data as params to SearchResults component
     const handleSearch = (e) => {
         e.preventDefault();
         let searchString = `/search?search=${searchText}`;
@@ -39,7 +43,7 @@ export default function Header(props) {
         if (searchHealth.length > 0) {
             searchString += `&health=${searchHealth.join(',')}`;
         }
-        setCollapseOpen(false);
+        setShowSearchFilters(false);
         navigate(searchString);
     };
 
@@ -87,9 +91,12 @@ export default function Header(props) {
 
                     <form className="col-5 col-lg-4" role="search" onSubmit={handleSearch}>
                         <div className="input-group">
-                            <button className="btn btn-outline-primary dropdown-toggle" type="button"
-                                    /*data-bs-toggle="collapse" data-bs-target="#collapseExample"*/
-                                    onClick={toggleCollapse}>
+                            <button className="btn btn-outline-primary dropdown-toggle"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#collapseExample"
+                                    onClick={toggleCollapse}
+                                    aria-expanded={showSearchFilters}>
                                 All
                             </button>
                             <input type="text" className="form-control clickable border-end-0" placeholder="Search"
@@ -99,9 +106,6 @@ export default function Header(props) {
                                 <FontAwesomeIcon icon={faMagnifyingGlass} size="lg"
                                                  style={{cursor: "pointer", color: "#ced4da"}}/>
                             </label>
-                            {/*<button className="btn btn-outline-secondary" type="submit">
-                                <FontAwesomeIcon icon={faMagnifyingGlass} size="lg"/>
-                            </button>*/}
                         </div>
                     </form>
 
@@ -181,7 +185,7 @@ export default function Header(props) {
                     </div>
                 </div>
             </nav>
-            <div className={`collapse ${collapseOpen ? 'show' : ''}`} id="collapseExample">
+            <div className={`collapse ${showSearchFilters ? 'show' : ''}`} id="collapseExample">
                 <div className="card card-body rounded-0 d-flex flex-row justify-content-between flex-wrap">
                     <div>
                         <h5>Allergies</h5>
@@ -248,178 +252,27 @@ export default function Header(props) {
                     </div>
                     <div>
                     <h5>Macronutrients</h5>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="macroNut1"/>
-                            <label className="form-check-label small" htmlFor="macroNut1">
-                                Fat
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="macroNut2"/>
-                            <label className="form-check-label small" htmlFor="macroNut2">
-                                Saturated
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="macroNut3"/>
-                            <label className="form-check-label small" htmlFor="macroNut3">
-                                Trans
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="macroNut4"/>
-                            <label className="form-check-label small" htmlFor="macroNut4">
-                                Monounsaturated
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="macroNut5"/>
-                            <label className="form-check-label small" htmlFor="macroNut5">
-                                Polyunsaturated
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="macroNut6"/>
-                            <label className="form-check-label small" htmlFor="macroNut6">
-                                Carbs
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="macroNut7"/>
-                            <label className="form-check-label small" htmlFor="macroNut7">
-                                Fiber
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="macroNut8"/>
-                            <label className="form-check-label small" htmlFor="macroNut8">
-                                Sugars
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="macroNut9"/>
-                            <label className="form-check-label small" htmlFor="macroNut9">
-                                Protein
-                            </label>
-                        </div>
+                        <ul>
+                            {microNutrients.map((item, index) => (
+                                <li className="my-1" style={{listStyleType: "none"}}>
+                                    <FontAwesomeIcon className="me-1" icon={faPlus} size="lg" style={{cursor: "pointer", color: "#ced4da"}}/>
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
 
                     <div>
                         <h5>Micronutrients</h5>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="microNut1"/>
-                            <label className="form-check-label small" htmlFor="microNut1">
-                                Cholesterol
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="microNut2"/>
-                            <label className="form-check-label small" htmlFor="microNut2">
-                                Sodium
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="microNut3"/>
-                            <label className="form-check-label small" htmlFor="microNut3">
-                                Calcium
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="microNut4"/>
-                            <label className="form-check-label small" htmlFor="microNut4">
-                                Magnesium
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="microNut5"/>
-                            <label className="form-check-label small" htmlFor="microNut5">
-                                Postassium
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="microNut6"/>
-                            <label className="form-check-label small" htmlFor="microNut6">
-                                Iron
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="microNut7"/>
-                            <label className="form-check-label small" htmlFor="microNut7">
-                                Vitamin A
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="microNut8"/>
-                            <label className="form-check-label small" htmlFor="microNut8">
-                                Vitamin C
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="microNut9"/>
-                            <label className="form-check-label small" htmlFor="microNut9">
-                                Thiamin (B1)
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="microNut10"/>
-                            <label className="form-check-label small" htmlFor="microNut10">
-                                Riboflavin (B2)
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="microNut11"/>
-                            <label className="form-check-label small" htmlFor="microNut11">
-                                Niacin (B3)
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="microNut12"/>
-                            <label className="form-check-label small" htmlFor="microNut12">
-                                Vitamin B12
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="microNut13"/>
-                            <label className="form-check-label small" htmlFor="microNut13">
-                                Vitamin D
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="microNut14"/>
-                            <label className="form-check-label small" htmlFor="microNut14">
-                                Vitamin E
-                            </label>
-                        </div>
-                        <div className="my-1">
-                            <input className="form-check-input me-1" type="checkbox" value=""
-                                   id="microNut15"/>
-                            <label className="form-check-label small" htmlFor="microNut15">
-                                Vitamin K
-                            </label>
-                        </div>
+                        <ul>
+                            {macroNutrients.map((item, index) => (
+                                <li className="my-1" style={{listStyleType: "none"}}>
+                                    <FontAwesomeIcon className="me-1" icon={faPlus} size="lg"
+                                                     style={{cursor: "pointer", color: "#ced4da"}}/>
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 </div>
             </div>

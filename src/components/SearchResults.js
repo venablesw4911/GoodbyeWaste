@@ -7,8 +7,9 @@ import {forEach} from "react-bootstrap/ElementChildren";
 
 export default function SearchResults(props) {
     const location = useLocation();
-    const [search, setSearch] = useState("");
 
+    const [search, setSearch] = useState("");
+    const [searchFilters, setSearchFilters] = useState(new Array());
     const [searchResult, setSearchResult] = useState(null); // State to store the fetched data
 
     useEffect(() => {
@@ -17,20 +18,23 @@ export default function SearchResults(props) {
         const dietFilter = params.get("diet");
         const healthFilters = params.get("health");
         let searchFilters = '';
+        let filters = [];
 
         if (dietFilter) {
             searchFilters += '&diet='+dietFilter;
+            filters.push(dietFilter);
         }
         if (healthFilters) {
             healthFilters.split(',').forEach(function(healthFilter) {
                 searchFilters += `&health=${healthFilter}`;
+                filters.push(healthFilter);
             });
         }
 
         fetchSearchResults(searchQuery, searchFilters);
 
+        setSearchFilters(filters);
         setSearch(searchQuery);
-        // Call your API with searchQuery
     }, [location.search]);
 
     const fetchSearchResults = async (query, filters) => {
@@ -50,7 +54,12 @@ export default function SearchResults(props) {
     }
 
     return (
-        <div className="col-10 col-md-9 col-lg-8 col-xl-7 mx-auto my-5">
+        <div className="col-10 col-md-9 col-lg-8 col-xl-7 mx-auto my-4">
+            <div className="mt-3 mb-2 d-flex justify-content-center flex-wrap">
+                {searchFilters.map((filter, index) => (
+                    <span class="badge rounded-pill text-secondary border border-secondary my-1 mx-2">{filter}</span>
+                ))}
+            </div>
             {searchResult ? (
                 <div className="list-group">
                     {searchResult.hits.map((recipe, index) => (
