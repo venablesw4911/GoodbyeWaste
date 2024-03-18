@@ -65,6 +65,32 @@ a {
     border-bottom-width: medium;
 }
 
+/* Planner Styles */
+.meal-block-container {
+    margin:  4rem auto auto auto;
+    width: 70%;
+    border: solid 2px black;
+}
+
+.meal-container {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    border: #3300ff 2px solid;
+    border-radius: 2rem;
+    padding: 1.5rem 0;
+    min-width: 300px;
+}
+
+.meal-container-meal {
+    padding-top: 1rem;
+    margin-right: 1rem;
+}
+
+.planned-meal-container {
+    margin-right: 3rem;
+}
+
 ::-webkit-scrollbar {
     width: 12px;
 }
