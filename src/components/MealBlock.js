@@ -1,5 +1,4 @@
 import React from "react";
-import Meal from "./Meal";
 import { FaPencilAlt } from "react-icons/fa";
 
 export default function MealBlock ( {date, breakfast, lunch, dinner} ) {
