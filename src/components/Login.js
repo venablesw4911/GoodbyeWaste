@@ -54,7 +54,7 @@ export default function Login(props) {
             props.setEmail(email)
             navigate('/')
         } else {
-            window.alert('Account already exists')
+            window.alert('Wrong email or password')
         }
         
     }
