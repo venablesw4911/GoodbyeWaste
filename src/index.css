@@ -14,6 +14,24 @@ a {
     background-color: lightgrey;
 }
 
+/*Profile Style*/
+.button-profile {
+    font-size: 27px;
+    padding: 0.2rem 5rem;
+    border-radius: 10000px;
+    margin-left: 2rem;
+    margin-top: 3.2rem;
+    background-color: #CDC1FF;
+    color: #FFFFFF;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.button-profile:hover {
+    cursor: pointer;
+    background-color: #7969ff;
+}
+
 .navbar {
     -webkit-box-shadow: 0 8px 6px -6px #999;
     -moz-box-shadow: 0 8px 6px -6px #999;
