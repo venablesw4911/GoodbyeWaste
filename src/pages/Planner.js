@@ -1,12 +1,12 @@
 import React from "react";
-import { useState } from "react";
+//import { useState } from "react";
 import PlannerHeader from "../components/PlannerHeader";
 import MealBlock from "../components/MealBlock";
 import GeneratePlannerButton from "../components/GeneratePlannerButton";
 import DateDisplayButton from "../components/DateDisplayButton";
 
 export default function Planner () {
-  const [meal, setMeal] = useState([
+  /*const [meal, setMeal] = useState([
     {
       id: 1,
       time: 'Breakfast',
@@ -53,8 +53,8 @@ export default function Planner () {
       name: 'Stir-Fried Tofu with Vegetables'
     },
 
-  ])
-  const [display, setDisplay] = useState('daily')
+  ])*/
+  //const [display, setDisplay] = useState('daily')
   const changeDisplay = (value) => {
     console.log(`${value.value} has been changed`)
   }
