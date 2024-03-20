@@ -14,6 +14,24 @@ a {
     background-color: lightgrey;
 }
 
+/*Profile Style*/
+.button-profile {
+    font-size: 27px;
+    padding: 0.2rem 5rem;
+    border-radius: 10000px;
+    margin-left: 2rem;
+    margin-top: 3.2rem;
+    background-color: #CDC1FF;
+    color: #FFFFFF;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.button-profile:hover {
+    cursor: pointer;
+    background-color: #7969ff;
+}
+
 .navbar {
     -webkit-box-shadow: 0 8px 6px -6px #999;
     -moz-box-shadow: 0 8px 6px -6px #999;
@@ -41,7 +59,7 @@ a {
 }
 
 .header {
-    height: 5rem;
+    height: 6rem;
 }
 
 .headerIMG {
@@ -50,7 +68,7 @@ a {
 }
 
 .login-box {
-    margin-top: 2.5rem;
+    margin-top: 3rem;
 }
 
 .login-splash {
@@ -80,6 +98,32 @@ a {
 
 .p-underline:hover {
     border-bottom-width: medium;
+}
+
+/* Planner Styles */
+.meal-block-container {
+    margin:  4rem auto auto auto;
+    width: 70%;
+    border: solid 2px black;
+}
+
+.meal-container {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    border: #3300ff 2px solid;
+    border-radius: 2rem;
+    padding: 1.5rem 0;
+    min-width: 300px;
+}
+
+.meal-container-meal {
+    padding-top: 1rem;
+    margin-right: 1rem;
+}
+
+.planned-meal-container {
+    margin-right: 3rem;
 }
 
 ::-webkit-scrollbar {

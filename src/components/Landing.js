@@ -1,19 +1,21 @@
 import React from "react"
-import Carousel from 'react-bootstrap/Carousel';
+import Carousel from 'react-bootstrap/esm/Carousel.js';
 import {motion} from "framer-motion";
 import splash from "../assets/Landing-Splash.webp"
 
 export default function Landing(props) {
     return (
         <motion.main
-            className="min-vh-100 min-vw-100 container row"
+            className="min-vh-100 min-vw-100 container-fluid row"
             initial={{x: window.innerWidth}}
             transition={{duration: 0.5}}
             animate={{x: 0}}
             exit={{x: window.innerWidth, transition: {duration: 0.5}}}
             style={{
                 backgroundImage: `url(${splash})`,
-                backgroundSize: "100% auto",
+                backgroundSize: "auto auto",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center center"
             }}
         >
             <div className="col-sm-12 my-auto justify-content-center">

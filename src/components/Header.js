@@ -15,8 +15,7 @@ export default function Header(props) {
     const location = useLocation();
     const navigate = useNavigate()
 
-    const [loggedIn, setLoggedIn] = useState(false)
-    const [email, setEmail] = useState('')
+    const [loggedIn, setLoggedIn] = props
 
     const [searchText, setSearchText] = useState('');
     const [searchDiet, setSearchDiet] = useState('');
@@ -47,31 +46,7 @@ export default function Header(props) {
         navigate(searchString);
     };
 
-    useEffect(() => {
-        // Fetch the user email and token from local storage
-        const user = JSON.parse(localStorage.getItem('user'))
-
-        // If the token/email does not exist, mark the user as logged out
-        if (!user || !user.token) {
-            setLoggedIn(false)
-            return
-        }
-
-        // If the token exists, verify it with the auth server to see if it is valid
-        fetch('http://localhost:3080/verify', {
-            method: 'POST',
-            headers: {
-                'jwt-token': user.token,
-            },
-        })
-            .then((r) => r.json())
-            .then((r) => {
-                setLoggedIn('success' === r.message)
-                setEmail(user.email || '')
-            })
-    }, [])
-
-    const onButtonClick = (e) => {
+    const onButtonClick = e => {
         if (loggedIn) {
             localStorage.removeItem('user')
             props.setLoggedIn(false)
