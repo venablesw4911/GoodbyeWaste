@@ -3,9 +3,8 @@ import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as regularHeart} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLocation } from "react-router-dom";
-import {forEach} from "react-bootstrap/ElementChildren";
 
-export default function SearchResults(props) {
+export default function SearchResults() {
     const location = useLocation();
 
     const [search, setSearch] = useState("");

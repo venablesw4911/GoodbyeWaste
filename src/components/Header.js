@@ -12,10 +12,13 @@ const macroNutrients = ['Fat', 'Saturated', 'Trans', 'Monounsaturated', 'Polyuns
 const microNutrients = ['Cholesterol', 'Sodium', 'Calcium', 'Magnesium', 'Postassium', 'Iron', 'Vitamin A', 'Vitamin C', 'Thiamin (B1)', 'Riboflavin (B2)', 'Niacin (B3)', 'Vitamin B12', 'Vitamin D', 'Vitamin E', 'Vitamin K'];
 
 export default function Header(props) {
+    const { loggedIn } = props;
+
     const location = useLocation();
     const navigate = useNavigate()
 
-    const [loggedIn, setLoggedIn] = props
+    //for grey
+    //const [loggedIn, setLoggedIn] = props;
 
     const [searchText, setSearchText] = useState('');
     const [searchDiet, setSearchDiet] = useState('');
