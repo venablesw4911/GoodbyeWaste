@@ -69,9 +69,9 @@ export default function Header(props) {
                           <li className="nav-item my-auto ms-md-auto">
                               <div className={'buttonContainer'}>
                                   <input
-                                    className={'inputButton'}
+                                    className={'inputButton button-action bg-action text-white form-control' }
                                     type="button"
-                                    //onClick={onButtonClick}
+                                    onClick={onButtonClick}
                                     value={loggedIn ? 'Log out' : 'Log in'}
                                   />
                               </div>
