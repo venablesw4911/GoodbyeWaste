@@ -44,7 +44,7 @@ export default function App(props) {
             }
         }
         checkUser()
-    }, [user, setUser, checked, setChecked])
+    }, [])
 
     return (
         <div className="overflow-x-hidden min-vh-100 bg-primary">
