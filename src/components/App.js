@@ -4,6 +4,7 @@ import Header from "./Header.js"
 import Footer from "./Footer.js"
 import AnimatedRoutes from "./AnimatedRoutes.js"
 import { useLocalStorage } from "@uidotdev/usehooks"
+import { useLiveQuery } from "dexie-react-hooks"
 
 export default function App(props) {
 

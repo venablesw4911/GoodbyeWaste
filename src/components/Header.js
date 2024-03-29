@@ -1,5 +1,6 @@
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import React, {useState, useEffect} from "react"
+import { dexieDB } from "./server/dexieDB.js"
 
 // Fontawesome imports
 import { faMagnifyingGlass, faBasketShopping, faCalendarDay, faUser, faHouse, faRightFromBracket, faCircleInfo, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -12,7 +13,6 @@ const macroNutrients = ['Fat', 'Saturated', 'Trans', 'Monounsaturated', 'Polyuns
 const microNutrients = ['Cholesterol', 'Sodium', 'Calcium', 'Magnesium', 'Postassium', 'Iron', 'Vitamin A', 'Vitamin C', 'Thiamin (B1)', 'Riboflavin (B2)', 'Niacin (B3)', 'Vitamin B12', 'Vitamin D', 'Vitamin E', 'Vitamin K'];
 
 export default function Header(props) {
-    const { loggedIn } = props;
 
     const location = useLocation();
     const navigate = useNavigate()
@@ -50,9 +50,8 @@ export default function Header(props) {
     };
 
     const onButtonClick = e => {
-        if (loggedIn) {
-            localStorage.removeItem('user')
-            props.setLoggedIn(false)
+        if (props.user) {
+            dexieDB.users.clear()
         } else {
             navigate('/login')
         }
@@ -118,7 +117,7 @@ export default function Header(props) {
                                         </li>
                                     */}
                                     <li className="nav-item dropdown">
-                                        {loggedIn ?
+                                        {props.users ?
                                             <span>
                                                 <a className="nav-link link-primary dropdown-toggle" href="#"
                                                    role="button"
@@ -135,7 +134,7 @@ export default function Header(props) {
                                                         <hr className="dropdown-divider"/>
                                                     </li>
                                                     <li>
-                                                        <a className="dropdown-item link-primary" href="#">
+                                                        <a className="dropdown-item link-primary" href="#" onClick={onButtonClick}>
                                                             <FontAwesomeIcon className="fa-fw me-2"
                                                                              icon={faRightFromBracket}/>
                                                             Log out

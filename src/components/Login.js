@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { dexieDB } from "./server/dexieDB.js"
 
 export default function Login(props) {
     let email;
@@ -46,12 +47,11 @@ export default function Login(props) {
         })
 
         if (response.status === 200) {
-            localStorage.setItem('user', JSON.stringify({ email, token: response.token }))
-            props.setUser(JSON.stringify({ email, token: response.token }))
-            localStorage.setItem('isChecked', isChecked )
-            props.setChecked(isChecked)
-            props.setLoggedIn(true)
-            props.setEmail(email)
+            await dexieDB.users.add({
+                email: email,
+                token: response.token,
+                checked: true
+            })
             navigate('/')
         } else {
             window.alert('Wrong email or password')
@@ -67,7 +67,7 @@ export default function Login(props) {
                     className="form-control" 
                     id="email" 
                     placeholder="Email"
-                    value={props.isChecked ? props.email : null}/>
+                    value={props.user.isChecked ? props.user.email : null}/>
             </div>
             <div className="height-row mb-3 w-75 mx-auto">
                 <input 

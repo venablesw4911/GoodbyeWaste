@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { dexieDB } from "./server/dexieDB.js"
 
 export default function Signup(props) {
     let email
@@ -54,9 +55,10 @@ export default function Signup(props) {
         })
 
         if (response.status === 200) {
-            localStorage.setItem('user', JSON.stringify({ email, token: response.token }))
-            props.setLoggedIn(true)
-            props.setEmail(email)
+            await dexieDB.users.add({
+                email: email,
+                token: response.token,
+            })
             navigate('/')
         } else {
             window.alert('Wrong email or password')
