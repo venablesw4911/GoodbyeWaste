@@ -1,6 +1,6 @@
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import React, {useState, useEffect} from "react"
-import { dexieDB } from "./server/dexieDB.js"
+import { dexieDB } from "../dexieDB.js"
 
 // Fontawesome imports
 import { faMagnifyingGlass, faBasketShopping, faCalendarDay, faUser, faHouse, faRightFromBracket, faCircleInfo, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -50,7 +50,7 @@ export default function Header(props) {
     };
 
     const onButtonClick = e => {
-        if (props.user) {
+        if (props.user.loggedIn) {
             dexieDB.users.clear()
         } else {
             navigate('/login')
@@ -117,7 +117,7 @@ export default function Header(props) {
                                         </li>
                                     */}
                                     <li className="nav-item dropdown">
-                                        {props.users ?
+                                        {props.user.loggedIn ?
                                             <span>
                                                 <a className="nav-link link-primary dropdown-toggle" href="#"
                                                    role="button"

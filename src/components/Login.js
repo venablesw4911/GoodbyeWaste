@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { dexieDB } from "./server/dexieDB.js"
+import { dexieDB } from "../dexieDB.js"
 
 export default function Login(props) {
     let email;
@@ -47,7 +47,9 @@ export default function Login(props) {
         })
 
         if (response.status === 200) {
-            await dexieDB.users.add({
+            localStorage.setItem('user', JSON.stringify({ email, token: response.token }))
+            console.log(JSON.stringify(response.token))
+            await dexieDB.users.put({
                 email: email,
                 token: response.token,
                 checked: true
