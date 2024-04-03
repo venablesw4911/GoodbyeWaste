@@ -52,6 +52,7 @@ export default function Header(props) {
     const onButtonClick = e => {
         if (props.user.loggedIn) {
             dexieDB.users.clear()
+            window.location.reload();
         } else {
             navigate('/login')
         }

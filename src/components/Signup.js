@@ -54,10 +54,11 @@ export default function Signup(props) {
             body: JSON.stringify({ email, password }),
         })
 
+        const result = await response.json()
         if (response.status === 200) {
             await dexieDB.users.put({
                 email: email,
-                token: response.token,
+                token: result.token,
             })
             navigate('/')
         } else {

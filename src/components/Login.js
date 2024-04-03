@@ -46,13 +46,13 @@ export default function Login(props) {
             body: JSON.stringify({ email, password }),
         })
 
+        const result = await response.json()
         if (response.status === 200) {
-            localStorage.setItem('user', JSON.stringify({ email, token: response.token }))
-            console.log(JSON.stringify(response.token))
+            //localStorage.setItem('user', JSON.stringify({ email, token: response.token }))
             await dexieDB.users.put({
                 email: email,
-                token: response.token,
-                checked: true
+                token: result.token,
+                checked: isChecked
             })
             navigate('/')
         } else {
