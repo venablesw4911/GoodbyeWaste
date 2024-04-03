@@ -44,12 +44,13 @@ app.post('/auth', async (req, res) => {
         }
         
         const token = jwt.sign(loginData, jwtSecretKey)
-        res.status(200).json({ message: 'success', token })
+        // console.log(token)
+        return res.status(200).json({ message: 'success', token })
       }
     })
   } else { // If no user is found, returns 404
     console.log("not found in database")
-    res.status(404).json({ message: 'user not found' })
+    return res.status(404).json({ message: 'user not found' })
   }
 })
 
