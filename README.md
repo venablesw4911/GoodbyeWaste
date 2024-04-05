@@ -5,6 +5,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 1) `npm install`
 2) `npm start`
+3) `npm run server`
+
+# Alternatives to Running Project
+
+4) `npm run start:install`
+5) `npm run start:dev`
+6) `npm run server:dev`
 
 ## Available Scripts
 
@@ -13,10 +20,29 @@ In the project directory, you can run:
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Open [http://localhost:3030](http://localhost:3030) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
+
+### `npm run start:install`
+
+Combines both start and install, will install all modules and run the client.
+Open [http://localhost:3030](http://localhost:3030) to view it in your browser.
+
+### `npm run start:dev`
+
+Runs the app with nodemon to watch for changes.
+Open [http://localhost:3030](http://localhost:3030) to view it in your browser.
+
+### `npm run server`
+
+Runs our back-end express client, run this in a terminal different than the client/app
+This replaces running "node __" in the /server folder
+
+### `npm run server:dev`
+
+Identical function to npm run server but also will update with changes
 
 ### `npm test`
 

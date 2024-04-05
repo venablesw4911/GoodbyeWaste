@@ -158,6 +158,23 @@ app.post('/pantry-insert', async (req, res) => {
   }
 });
 
+// Getter requests
+app.post('/get', async (req, res) => {
+  if (req === 'userId') {
+    res = await db.collection().findOne
+    
+    // Return object with user based on userId
+    // Return object with firstName, lastName, email, dietaryPreferences (which is an array)
+
+  }
+});
+
+// Setter requests
+app.post('./set', async (req, res) => {
+  
+  
+});
+
 app.use(express.static('../../build'))
 
 app.listen(3081)
