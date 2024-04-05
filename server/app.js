@@ -108,15 +108,15 @@ app.post('/create-account', async (req, res) => {
 
 app.post('/pantry-insert', async (req, res) => {
   // Extract data from query parameters
-  let { userID, ingredientID, amount } = req.query;
+  let { userId, ingredientID, amount } = req.query;
   
-  userID = parseInt(userID);
+  userId = parseInt(userId);
   ingredientID = parseInt(ingredientID);
   amount = parseInt(amount);
   
   try {
     // Check if user exists
-    const userExists = await db.collection("user").findOne({ userID });
+    const userExists = await db.collection("user").findOne({ userId });
     if (!userExists) {
       console.log("User does not exist");
       return res.status(400).json({ error: "User does not exist" });
@@ -133,23 +133,23 @@ app.post('/pantry-insert', async (req, res) => {
     */
     
     // Check if userPantry item already exists with same user, ingredient, and amount
-    const existingItem = await db.collection("userPantry").findOne({ userID, ingredientID, amount });
+    const existingItem = await db.collection("userPantry").findOne({ userId, ingredientID, amount });
     if (existingItem) {
       console.log("Pantry item already exists with the same user, ingredient, and amount");
       return res.status(400).json({ error: "Pantry item already exists" });
     }
     
     // Check if userPantry item already exists with same user and ingredient but different amount
-    const existingItemWithDifferentAmount = await db.collection("userPantry").findOne({ userID, ingredientID, amount: { $ne: amount } });
+    const existingItemWithDifferentAmount = await db.collection("userPantry").findOne({ userId, ingredientID, amount: { $ne: amount } });
     if (existingItemWithDifferentAmount) {
       // Update existing item with new amount
-      await db.collection("userPantry").updateOne({ userID, ingredientID }, { $set: { amount } });
+      await db.collection("userPantry").updateOne({ userId, ingredientID }, { $set: { amount } });
       console.log("Updated existing pantry item with new amount");
       return res.status(200).json({ message: "Pantry item updated successfully" });
     }
     
     // Add new userPantry item
-    await db.collection("userPantry").insertOne({ userID, ingredientID, amount });
+    await db.collection("userPantry").insertOne({ userId, ingredientID, amount });
     console.log("Added new pantry item");
     return res.status(200).json({ message: "Pantry item submitted successfully" });
   } catch (error) {
