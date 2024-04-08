@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { dexieDB } from "../dexieDB.js"
+import { dexieDB } from "../../../dexieDB.js"
 
 export default function Signup(props) {
     let email

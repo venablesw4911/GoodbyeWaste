@@ -6,7 +6,9 @@ import { useLocation } from "react-router-dom";
 import RecipeCard from './RecipeCard.js';
 import RecipeModal from "./RecipeModal.js";
 
-export default function SearchResults() {
+export default function SearchResults(props) {
+    const {user} = props
+
     const location = useLocation();
 
     const [search, setSearch] = useState("");
@@ -15,6 +17,26 @@ export default function SearchResults() {
 
     const [modalShow, setModalShow] = useState(false)
     const [modalContent, setModalContent] = useState({})
+
+    useEffect(() => {
+        // Fetch allergy diets when component mounts
+        async function fetchFavorites() {
+            try {
+                const response = await fetch(`http://localhost:3081/get-favorites/${user?.userId}`);
+                const favorites = await response.json();
+                console.log("favorites")
+                console.log(favorites)
+            } catch (err) {
+                console.error('Failed to retrieve diets')
+                console.error(err)
+            }
+        }
+
+        if (user.loggedIn) {
+            console.log(user)
+            fetchFavorites()
+        }
+    }, [user]);
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -45,6 +67,7 @@ export default function SearchResults() {
         try {
             const response = await fetch(`https://api.edamam.com/search?q=${query}&app_id=ed3e6094&app_key=065fd89494e23e47cceae33090cf274d${filters}`);
             const data = await response.json();
+            //console.log(data.hits)
             setSearchResult(data); // Store the fetched data in state
         } catch (error) {
             console.error('Error fetching search results:', error);

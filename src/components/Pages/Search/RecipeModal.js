@@ -6,7 +6,6 @@ export default function RecipeModal(props) {
     const [show, setShow] = useState(showModal);
 
     useEffect(() => {
-        console.log(recipe)
         setShow(showModal)
     }, [recipe]);
 

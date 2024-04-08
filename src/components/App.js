@@ -20,8 +20,6 @@ export default function App(props) {
     // userState is an array only ever containing one object
     // It might be empty if the user has never logged in (so we use .?)
     useEffect(() => {
-        console.log('Effect running')
-
         const token = userState?.[0]?.token
         const email = userState?.[0]?.email 
         const checked = userState?.[0]?.checked
