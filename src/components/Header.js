@@ -25,6 +25,20 @@ export default function Header(props) {
     const [searchHealth, setSearchHealth] = useState([]);
     const [showSearchFilters, setShowSearchFilters] = useState(false);
 
+    useEffect(() => {
+        // Fetch allergy diets when component mounts
+        async function fetchAllergyDiets() {
+            const response = await fetch('http://localhost:3081/get-allergies');
+            const data = await response.json();
+            //console.log(data)
+            const response1 = await fetch('http://localhost:3081/get-diets');
+            const data1 = await response1.json();
+            //console.log(data1)
+        }
+
+        fetchAllergyDiets();
+    }, []);
+
     // On change of location, hide search filters collapse
     useEffect(() => {
         setShowSearchFilters(false); // Close the navigation panel
@@ -169,7 +183,7 @@ export default function Header(props) {
                         <h5>Allergies</h5>
                         <ul className="p-0" style={{ listStyleType: "none" }}>
                             {allergies.map((item, index) => (
-                                <li className="my-1">
+                                <li key={0+index} className="my-1">
                                     <input className="form-check-input me-1"
                                            type="checkbox"
                                            value={item.toLowerCase()}
@@ -194,7 +208,7 @@ export default function Header(props) {
                         <h5>Diets</h5>
                         <ul className="p-0" style={{listStyleType: "none"}}>
                             {health.map((item, index) => (
-                                <li className="my-1">
+                                <li key={1+index} className="my-1">
                                     <input className="form-check-input me-1"
                                            type="checkbox"
                                            value={item.toLowerCase()}
@@ -213,7 +227,7 @@ export default function Header(props) {
                                 </li>
                             ))}
                             {diets.map((item, index) => (
-                                <li className="my-1">
+                                <li key={2+index} className="my-1">
                                     <input className="form-check-input me-1"
                                            type="radio"
                                            value={item.toLowerCase()}
@@ -232,7 +246,7 @@ export default function Header(props) {
                     <h5>Macronutrients</h5>
                         <ul>
                             {microNutrients.map((item, index) => (
-                                <li className="my-1" style={{listStyleType: "none"}}>
+                                <li key={index} className="my-1" style={{listStyleType: "none"}}>
                                     <FontAwesomeIcon className="me-1" icon={faPlus} size="lg" style={{cursor: "pointer", color: "#ced4da"}}/>
                                     {item}
                                 </li>
@@ -244,7 +258,7 @@ export default function Header(props) {
                         <h5>Micronutrients</h5>
                         <ul>
                             {macroNutrients.map((item, index) => (
-                                <li className="my-1" style={{listStyleType: "none"}}>
+                                <li key={index} className="my-1" style={{listStyleType: "none"}}>
                                     <FontAwesomeIcon className="me-1" icon={faPlus} size="lg"
                                                      style={{cursor: "pointer", color: "#ced4da"}}/>
                                     {item}

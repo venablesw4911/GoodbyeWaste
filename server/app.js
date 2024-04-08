@@ -21,6 +21,29 @@ app.use(express.urlencoded({ extended: true }))
 // app.get('/', (_req, res) => {
 //     res.send('Auth API.\nPlease use POST /auth & POST /verify for authentication')
 //   })
+app.get('/get-allergies', async (req, res) => {
+  const collection = await db.collection("diets")
+  const query = {dietCategory:"allergy"}
+  try {
+    const allergies = await collection.find(query).toArray()
+    res.status(200).json(allergies);
+  } catch (error) {
+    console.error('Error retrieving allergies:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+})
+
+app.get('/get-diets', async (req, res) => {
+  const collection = await db.collection("diets")
+  const query = {dietCategory:"diet"}
+  try {
+    const diets = await collection.find(query).toArray()
+    res.status(200).json(diets);
+  } catch (error) {
+    console.error('Error retrieving diets:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+})
 
 // The auth endpoint that creates a new user record or logs a user based on an existing record
 app.post('/auth', async (req, res) => {

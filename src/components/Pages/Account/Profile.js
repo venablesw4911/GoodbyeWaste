@@ -1,5 +1,5 @@
 import React from "react";
-import pfp from "../assets/pfp.png"
+import pfp from "../../../assets/pfp.png"
 import ProfileInput from "./ProfileInput.js";
 
 export default function Profile() {
