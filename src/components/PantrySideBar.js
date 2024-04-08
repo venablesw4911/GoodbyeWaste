@@ -3,10 +3,8 @@ import {
   CDBSidebar,
   CDBSidebarContent,
   CDBSidebarHeader,
-  CDBSidebarMenu,
-  CDBSidebarMenuItem,
+  CDBSidebarMenu
 } from 'cdbreact';
-import PantryButton from './PantryButton.js';
 import PantryCategories from './PantryCategories.js'
 
 export default function PantrySideBar(props) {
