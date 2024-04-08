@@ -17,13 +17,32 @@ export default function Header(props) {
     const location = useLocation();
     const navigate = useNavigate()
 
-    //for grey
-    //const [loggedIn, setLoggedIn] = props;
-
     const [searchText, setSearchText] = useState('');
     const [searchDiet, setSearchDiet] = useState('');
     const [searchHealth, setSearchHealth] = useState([]);
     const [showSearchFilters, setShowSearchFilters] = useState(false);
+
+    //const [diets, setDiets] = useState([])
+    //const [allergies, setAllergies] = useState([])
+
+    useEffect(() => {
+        // Fetch allergy diets when component mounts
+        async function fetchAllergyDiets() {
+            try {
+                const response = await fetch('http://localhost:3081/get-allergies');
+                const allergies = await response.json();
+                //setAllergies(allergies)
+                const response1 = await fetch('http://localhost:3081/get-diets');
+                const diets = await response1.json();
+                //setDiets(diets)
+            } catch (err) {
+                console.error('Failed to retrieve diets')
+                console.error(err)
+            }
+        }
+
+        fetchAllergyDiets();
+    }, []);
 
     // On change of location, hide search filters collapse
     useEffect(() => {
@@ -169,7 +188,7 @@ export default function Header(props) {
                         <h5>Allergies</h5>
                         <ul className="p-0" style={{ listStyleType: "none" }}>
                             {allergies.map((item, index) => (
-                                <li className="my-1">
+                                <li key={0+index} className="my-1">
                                     <input className="form-check-input me-1"
                                            type="checkbox"
                                            value={item.toLowerCase()}
@@ -194,7 +213,7 @@ export default function Header(props) {
                         <h5>Diets</h5>
                         <ul className="p-0" style={{listStyleType: "none"}}>
                             {health.map((item, index) => (
-                                <li className="my-1">
+                                <li key={1+index} className="my-1">
                                     <input className="form-check-input me-1"
                                            type="checkbox"
                                            value={item.toLowerCase()}
@@ -213,7 +232,7 @@ export default function Header(props) {
                                 </li>
                             ))}
                             {diets.map((item, index) => (
-                                <li className="my-1">
+                                <li key={2+index} className="my-1">
                                     <input className="form-check-input me-1"
                                            type="radio"
                                            value={item.toLowerCase()}
@@ -232,7 +251,7 @@ export default function Header(props) {
                     <h5>Macronutrients</h5>
                         <ul>
                             {microNutrients.map((item, index) => (
-                                <li className="my-1" style={{listStyleType: "none"}}>
+                                <li key={index} className="my-1" style={{listStyleType: "none"}}>
                                     <FontAwesomeIcon className="me-1" icon={faPlus} size="lg" style={{cursor: "pointer", color: "#ced4da"}}/>
                                     {item}
                                 </li>
@@ -244,7 +263,7 @@ export default function Header(props) {
                         <h5>Micronutrients</h5>
                         <ul>
                             {macroNutrients.map((item, index) => (
-                                <li className="my-1" style={{listStyleType: "none"}}>
+                                <li key={index} className="my-1" style={{listStyleType: "none"}}>
                                     <FontAwesomeIcon className="me-1" icon={faPlus} size="lg"
                                                      style={{cursor: "pointer", color: "#ced4da"}}/>
                                     {item}

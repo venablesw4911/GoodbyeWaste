@@ -14,7 +14,7 @@ export default function AnimatedRoutes(props) {
             <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<Landing/>}/>
                 <Route path="/login" element={<AccountChange {...props}/>}/>
-                <Route path="/search" element={<SearchResults/>}/>
+                <Route path="/search" element={<SearchResults {...props}/>}/>
             </Routes>
         </AnimatePresence>
     )

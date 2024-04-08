@@ -3,15 +3,37 @@ import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as regularHeart} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLocation } from "react-router-dom";
+import RecipeCard from './RecipeCard.js';
+import RecipeModal from "./RecipeModal.js";
 import PantrySideBar from "./PantrySideBar.js"
 
-export default function SearchResults() {
+export default function SearchResults(props) {
+    const { user } = props
+
     const location = useLocation();
 
     const [search, setSearch] = useState("");
     const [searchFilters, setSearchFilters] = useState(new Array());
     const [searchResult, setSearchResult] = useState(null); // State to store the fetched data
+
     const [pantryItems, setPantryItems] = useState([])
+    const [favorites, setFavorites] = useState([])
+
+    // Create state for the modal visibility & recipe details
+    const [detailsOpen, setDetailsOpen] = useState(false)
+    const [recipeDetails, setRecipeDetails] = useState({})
+
+    useEffect(() => {
+        // Fetch allergy diets when component mounts
+        async function fetchFavorites() {
+            const response = await fetch(`http://localhost:3081/get-favorites/${user.userId}/`)
+            const favorites = await response.json()
+            setFavorites(favorites)
+        }
+        if (user?.loggedIn) {
+            fetchFavorites()
+        }
+    }, []);
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -50,9 +72,9 @@ export default function SearchResults() {
         }
     };
 
-    function extractString(url) {
-        const match = url.match(/\/\/(.*?)\.com/);
-        return match ? match[1] : '';
+    function showRecipeInformation (recipe){
+        setRecipeDetails(recipe.recipe)
+        setDetailsOpen(true)
     }
 
     return (
@@ -60,38 +82,34 @@ export default function SearchResults() {
             <div className="col-auto">
                 <PantrySideBar setPantryItems={setPantryItems}/>
             </div>
-        <div className="col-10 col-md-9 col-lg-8 col-xl-7 mx-auto my-4">
-            <div className="mt-3 mb-2 d-flex justify-content-center flex-wrap">
-                {searchFilters.map((filter, index) => (
-                    <span class="badge rounded-pill text-secondary border border-secondary my-1 mx-2">{filter}</span>
-                ))}
-            </div>
-            {searchResult ? (
-                <div className="list-group">
-                    {searchResult.hits.map((recipe, index) => (
-                        <div href="#" className="card list-group-item list-group-item-action p-3 mb-2" key={index}>
-                            <div className="row">
-                                <div className="col-auto">
-                                    <img src={recipe.recipe.image} alt="recipe image"
-                                         style={{ height: "200px" }}/>
-                                </div>
-                                <div className="col d-flex align-items-start flex-column">
-                                    <div className="d-flex w-100 justify-content-between">
-                                        <h4 className="mb-1">{recipe.recipe.label}</h4>
-                                        <small><FontAwesomeIcon icon={false ? solidHeart : regularHeart} size="lg"/></small>
-                                    </div>
-                                    <small><a href={recipe.recipe.url} target="_blank">{extractString(recipe.recipe.url) + '.com'}</a></small>
-                                    <p className="mt-auto mb-1">You have all {recipe.recipe.ingredients.length} ingredients</p>
-
-                                </div>
-                            </div>
-                        </div>
+            <div className="col-10 col-md-9 col-lg-8 col-xl-7 mx-auto my-4">
+                <div className="mt-3 mb-2 d-flex justify-content-center flex-wrap">
+                    {searchFilters.map((filter, index) => (
+                        <span class="badge rounded-pill text-secondary border border-secondary my-1 mx-2">{filter}</span>
                     ))}
                 </div>
-            ) : (
-                <p>Loading...</p>
-            )}
-        </div>
+                {searchResult ? (
+                    <div className="list-group">
+                        {searchResult.hits.map((recipe, index) => (
+                            <RecipeCard
+                                key={index}
+                                recipe={recipe.recipe}
+                                favorites={favorites.filter(fav => fav.favoriteRecipeURI == recipe.recipe.uri)}
+                                user={user}
+                                onClick={() => showRecipeInformation(recipe)} />
+                        ))}
+                    </div>
+                ) : (
+                    <p>Loading...</p>
+                )}
+            </div>
+            <RecipeModal
+                recipe={recipeDetails}
+                isOpen={detailsOpen}
+                onClose={() => {
+                    setDetailsOpen(false)
+                }}
+            />
         </div>
     );
 }
