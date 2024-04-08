@@ -25,8 +25,8 @@ export default function PantrySideBar(props) {
     const [selected, setSelected] = useState([])
     const categories = []
 
-    ingredientCategories.forEach((category) => {
-        categories.push(<PantryCategories category={category} ingredients={ingredientsArray} selected={selected} setSelected={setSelected}/>)
+    ingredientCategories.forEach((category, index) => {
+        categories.push(<PantryCategories key={index} category={category} ingredients={ingredientsArray} selected={selected} setSelected={setSelected}/>)
     })
 
     useEffect(() => {
@@ -39,7 +39,7 @@ export default function PantrySideBar(props) {
         <div style={{ display: 'flex', overflow: 'scroll initial' }}>
             <CDBSidebar textColor="#fff" backgroundColor="#333">
                 <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
-                    <a href="/" className="text-decoration-none" style={{ color: 'inherit' }}>
+                    <a href="/public" className="text-decoration-none" style={{ color: 'inherit' }}>
                         Pantry
                     </a>
                 </CDBSidebarHeader>

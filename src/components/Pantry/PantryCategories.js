@@ -5,9 +5,9 @@ export default function PantryCategories(props) {
     const ingredients = props.ingredients
     const buttons = []
 
-    ingredients.forEach((ingredient) => {
+    ingredients.forEach((ingredient, index) => {
         if (ingredient.category === props.category) {
-            buttons.push(<PantryButton ingredient={ingredient} selected={props.selected} setSelected={props.setSelected}/>)
+            buttons.push(<PantryButton key={index} ingredient={ingredient} selected={props.selected} setSelected={props.setSelected}/>)
         }
     })
 

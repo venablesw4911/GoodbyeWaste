@@ -1,7 +1,7 @@
 import {Route, Routes, useLocation} from "react-router-dom"
 import Landing from "./Landing.js"
-import AccountChange from "./AccountChange.js"
-import SearchResults from "./SearchResults.js"
+import AccountChange from "./Account/AccountChange.js"
+import SearchResults from "./Search/SearchResults.js"
 
 import {AnimatePresence} from "framer-motion"
 
@@ -14,7 +14,7 @@ export default function AnimatedRoutes(props) {
             <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<Landing/>}/>
                 <Route path="/login" element={<AccountChange {...props}/>}/>
-                <Route path="/search" element={<SearchResults/>}/>
+                <Route path="/search" element={<SearchResults {...props}/>}/>
             </Routes>
         </AnimatePresence>
     )
