@@ -17,23 +17,28 @@ export default function Header(props) {
     const location = useLocation();
     const navigate = useNavigate()
 
-    //for grey
-    //const [loggedIn, setLoggedIn] = props;
-
     const [searchText, setSearchText] = useState('');
     const [searchDiet, setSearchDiet] = useState('');
     const [searchHealth, setSearchHealth] = useState([]);
     const [showSearchFilters, setShowSearchFilters] = useState(false);
 
+    //const [diets, setDiets] = useState([])
+    //const [allergies, setAllergies] = useState([])
+
     useEffect(() => {
         // Fetch allergy diets when component mounts
         async function fetchAllergyDiets() {
-            const response = await fetch('http://localhost:3081/get-allergies');
-            const data = await response.json();
-            //console.log(data)
-            const response1 = await fetch('http://localhost:3081/get-diets');
-            const data1 = await response1.json();
-            //console.log(data1)
+            try {
+                const response = await fetch('http://localhost:3081/get-allergies');
+                const allergies = await response.json();
+                //setAllergies(allergies)
+                const response1 = await fetch('http://localhost:3081/get-diets');
+                const diets = await response1.json();
+                //setDiets(diets)
+            } catch (err) {
+                console.error('Failed to retrieve diets')
+                console.error(err)
+            }
         }
 
         fetchAllergyDiets();

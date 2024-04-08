@@ -9,7 +9,7 @@ import db from './connect-db.js'
 // Initialize Express app
 const app = express()
 
-// Define a JWT secret key. This should be isolated by using env variables for security
+// Define a JWT secret key. This should be isolated by using .env variables for security
 const jwtSecretKey = 'dsfdsfsdfdsvcsvdfgefg'
 
 // Set up CORS and JSON middlewares
@@ -21,11 +21,31 @@ app.use(express.urlencoded({ extended: true }))
 // app.get('/', (_req, res) => {
 //     res.send('Auth API.\nPlease use POST /auth & POST /verify for authentication')
 //   })
+
+app.get('/get-favorites/:userId', async (req, res) => {
+  const collection = await db.collection("favorites")
+  const userId = req.params.userId  //not working
+  try {
+    const entries = await collection.find({}).toArray()
+    let favorites = []
+    await entries.forEach(entry => {
+      if (entry.userId == userId) {
+        favorites.push(entry.favoriteRecipeURI)
+      }
+    })
+    res.status(200).json(favorites)
+  } catch (error) {
+    console.error('Error retrieving favorites:', error)
+    res.status(500).json({ message: 'Server error' })
+  }
+})
+
 app.get('/get-allergies', async (req, res) => {
   const collection = await db.collection("diets")
   const query = {dietCategory:"allergy"}
   try {
     const allergies = await collection.find(query).toArray()
+
     res.status(200).json(allergies);
   } catch (error) {
     console.error('Error retrieving allergies:', error);

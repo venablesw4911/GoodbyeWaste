@@ -8,20 +8,6 @@ export default function RecipeCard(props) {
     const { recipe, onClick } = props;
     const location = useLocation();
 
-    useEffect(() => {
-        async function getDiets () {
-            try {
-                const diets = await fetch('http://localhost:3081/get-diets')
-                console.log(diets)
-            } catch (err) {
-                console.error('Failed to retrieve diets')
-                console.error(err)
-            }
-        }
-
-        getDiets()
-    }, [])
-
     function extractString(url) {
         const match = url.match(/\/\/(.*?)\.com/);
         return match ? match[1] : '';
