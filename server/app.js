@@ -160,20 +160,93 @@ app.post('/pantry-insert', async (req, res) => {
 });
 
 // Getter requests
-app.post('/get', async (req, res) => {
-  if (req === 'userId') {
-    res = await db.collection().findOne
-    
-    // Return object with user based on userId
-    // Return object with firstName, lastName, email, dietaryPreferences (which is an array)
+app.get('/get-user', async (req, res) => {
+  try {
+    // if userId is sent it will find the user
+    let { userId } = req.body;
+    userId = parseInt(userId);
 
+    const user = await db.collection('user').findOne({ userId });
+    if (user) {
+      res.json({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        dietaryPreferences: user.dietaryPreferences
+      });
+    } else {
+      res.status(404).json({ message: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error retrieving user:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
-// Setter requests
-app.post('./set', async (req, res) => {
+// Setter requests for first name
+app.post('/set-first', async (req, res) => {
+  try {
+      const { userId, firstName } = req.body;
+      
+      const result = await db.collection('user').updateOne(
+          { userId },
+          { $set: { firstName } },
+          { upsert: true }
+      );
   
+      if (result.modifiedCount === 1 || result.upsertedCount === 1) {
+          res.json({ message: 'First name updated/created successfully' });
+      } else {
+          res.status(500).json({ message: 'Failed to update/create first name' });
+      }
+  } catch (error) {
+      console.error('Error updating/creating first name:', error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Setter requests for last name
+app.post('/set-last', async (req, res) => {
+  try {
+      const { userId, lastName } = req.body;
+      
+      const result = await db.collection('user').updateOne(
+          { userId },
+          { $set: { lastName } },
+          { upsert: true }
+      );
   
+      if (result.modifiedCount === 1 || result.upsertedCount === 1) {
+          res.json({ message: 'Last name updated/created successfully' });
+      } else {
+          res.status(500).json({ message: 'Failed to update/create last name' });
+      }
+  } catch (error) {
+      console.error('Error updating/creating last name:', error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Setter requests for dietary preferences
+app.post('/set-pref', async (req, res) => {
+  try {
+      const { userId, dietaryPreferences } = req.body;
+      
+      const result = await db.collection('user').updateOne(
+          { userId },
+          { $set: { dietaryPreferences } },
+          { upsert: true }
+      );
+  
+      if (result.modifiedCount === 1 || result.upsertedCount === 1) {
+          res.json({ message: 'Dietary preferences updated/created successfully' });
+      } else {
+          res.status(500).json({ message: 'Failed to update/create dietary preferences' });
+      }
+  } catch (error) {
+      console.error('Error updating/creating dietary preferences:', error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 app.use(express.static('../../build'))
