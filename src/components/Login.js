@@ -52,7 +52,7 @@ export default function Login(props) {
             await dexieDB.users.put({
                 email: email,
                 token: result.token,
-                checked: isChecked
+                userId: result.userId
             })
             navigate('/')
         } else {
@@ -105,7 +105,7 @@ export default function Login(props) {
             <br/>
             <div className="mb-3 w-75 mx-auto">
                 <button className="button-google text-primary form-control">
-                    <img className="me-3" src={("../src/assets/Google-Logo.png")} alt="Google Logo"/>
+                    <img className="me-3" src={("./assets/Google-Logo.png")} alt="Google Logo"/>
                     Sign in with Google
                 </button>
             </div>

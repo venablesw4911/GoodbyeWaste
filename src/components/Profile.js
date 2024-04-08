@@ -13,7 +13,7 @@ export default function Profile() {
     }
 
     return (
-        <div className='bg-primary d-flex w-100 m-auto justify-content-evenly'>
+        <div className='bgColor d-flex w-100 m-auto justify-content-evenly'>
             <div style={{backgroundColor: "#fff6e8"}} className='border border-black w-25 d-flex flex-column justify-content-between vh-100'>
 
                 <div className='d-flex flex-column align-items-center'>

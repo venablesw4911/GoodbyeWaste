@@ -40,12 +40,12 @@ app.post('/auth', async (req, res) => {
       } else {
         const loginData = {
           email,
-          signInTime: Date.now(),
+          signInTime: Date.now()
         }
         
         const token = jwt.sign(loginData, jwtSecretKey)
         // console.log(token)
-        return res.status(200).json({ message: 'success', token })
+        return res.status(200).json({ message: 'success', token, userId: account.userId })
       }
     })
   } else { // If no user is found, returns 404
@@ -85,7 +85,7 @@ app.post('/create-account', async (req, res) => {
     bcrypt.hash(password, 10, async function (_err, hash) {
       //console.log({ email, password: hash })
       //db.get('users').push({ email, password: hash }).write()
-      const result = await collection.insertOne({ email, password: hash });
+      const result = await collection.insertOne({ email, password: hash, firstName: "", lastName: "", dietaryPreferences: [], plannedMeals: []});
       
       if(result) {
         const loginData = {
@@ -94,7 +94,7 @@ app.post('/create-account', async (req, res) => {
         }
         
         const token = jwt.sign(loginData, jwtSecretKey)
-        res.status(200).json({ message: 'success', token })
+        res.status(200).json({ message: 'success', token, userId: account.userId })
       } else {
         res.status(400).json({ message: 'error' })
       }

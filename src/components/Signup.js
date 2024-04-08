@@ -59,6 +59,7 @@ export default function Signup(props) {
             await dexieDB.users.put({
                 email: email,
                 token: result.token,
+                userId: result.userId
             })
             navigate('/')
         } else {
