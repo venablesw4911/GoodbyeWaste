@@ -3,6 +3,7 @@ import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as regularHeart} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLocation } from "react-router-dom";
+import PantrySideBar from "./PantrySideBar.js"
 
 export default function SearchResults() {
     const location = useLocation();
@@ -10,15 +11,17 @@ export default function SearchResults() {
     const [search, setSearch] = useState("");
     const [searchFilters, setSearchFilters] = useState(new Array());
     const [searchResult, setSearchResult] = useState(null); // State to store the fetched data
+    const [pantryItems, setPantryItems] = useState([])
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-        const searchQuery = params.get("search");
+        const pantryString = pantryItems.join(' ')
+        const searchQuery = params.get("search").concat(' ').concat(pantryString);
         const dietFilter = params.get("diet");
         const healthFilters = params.get("health");
         let searchFilters = '';
         let filters = [];
-
+        // console.log(searchQuery)
         if (dietFilter) {
             searchFilters += '&diet='+dietFilter;
             filters.push(dietFilter);
@@ -53,6 +56,10 @@ export default function SearchResults() {
     }
 
     return (
+        <div className="bgColor row">
+            <div className="col-auto">
+                <PantrySideBar setPantryItems={setPantryItems}/>
+            </div>
         <div className="col-10 col-md-9 col-lg-8 col-xl-7 mx-auto my-4">
             <div className="mt-3 mb-2 d-flex justify-content-center flex-wrap">
                 {searchFilters.map((filter, index) => (
@@ -84,6 +91,7 @@ export default function SearchResults() {
             ) : (
                 <p>Loading...</p>
             )}
+        </div>
         </div>
     );
 }

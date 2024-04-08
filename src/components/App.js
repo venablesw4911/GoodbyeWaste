@@ -13,7 +13,7 @@ export default function App(props) {
     const [user, setUser] = React.useState({
         token : '',
         email : '',
-        checked : false,
+        userId : 0,
         loggedIn : false
     })
 
@@ -24,15 +24,11 @@ export default function App(props) {
 
         const token = userState?.[0]?.token
         const email = userState?.[0]?.email 
-        const checked = userState?.[0]?.checked
-    
+        const userId = userState?.[0]?.userId
+
         // If the token/email does not exist, mark the user as logged out
         if (!token) {
             return
-        }
-
-        if(checked !== user.checked) {
-            setUser({ ...user, checked })
         }
 
         async function checkUser() {
@@ -49,6 +45,7 @@ export default function App(props) {
                     ...user,
                     token,
                     email,
+                    userId,
                     loggedIn: true
                 })
             }
@@ -60,7 +57,7 @@ export default function App(props) {
     }, [userState, user])
 
     return (
-        <div className="overflow-x-hidden min-vh-100 bg-primary">
+        <div className="overflow-x-hidden min-vh-100 bgColor">
             <Header user={user}/>
             <AnimatedRoutes user={user}/>
             <Footer/>
