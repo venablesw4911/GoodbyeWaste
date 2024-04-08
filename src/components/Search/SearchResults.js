@@ -2,7 +2,7 @@ import React, { useState, useEffect  } from "react"
 import { useLocation } from "react-router-dom";
 import RecipeCard from './RecipeCard.js';
 import RecipeModal from "./RecipeModal.js";
-import PantrySideBar from "./PantrySideBar.js"
+import PantrySideBar from "../Pantry/PantrySideBar.js"
 
 export default function SearchResults(props) {
     const { user } = props

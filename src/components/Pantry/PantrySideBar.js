@@ -39,7 +39,7 @@ export default function PantrySideBar(props) {
         <div style={{ display: 'flex', overflow: 'scroll initial' }}>
             <CDBSidebar textColor="#fff" backgroundColor="#333">
                 <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
-                    <a href="/" className="text-decoration-none" style={{ color: 'inherit' }}>
+                    <a href="/public" className="text-decoration-none" style={{ color: 'inherit' }}>
                         Pantry
                     </a>
                 </CDBSidebarHeader>

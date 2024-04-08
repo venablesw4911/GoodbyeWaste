@@ -1,11 +1,11 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { dexieDB } from "../dexieDB.js"
+import { dexieDB } from "../../dexieDB.js"
 
-export default function Login(props) {
-    let email;
-    let password;
-    let isChecked;
+export default function Signup(props) {
+    let email
+    let password
+    let passwordConfirm
     const [error, setError] = useState("")
 
     const navigate = useNavigate()
@@ -15,9 +15,9 @@ export default function Login(props) {
         event.preventDefault()
         email = event.target.email.value
         password = event.target.password.value
-        isChecked = event.target.remember.checked
+        passwordConfirm = event.target.passwordConfirm.value
         setError("");
-        //console.log(isChecked)
+
         if ("" === email) {
             setError("Please enter your email")
             return
@@ -29,18 +29,26 @@ export default function Login(props) {
         }
 
         if ("" === password) {
-            setError("Please enter your password")
+            setError("Please enter a password")
             return
         }
-        logIn()
+
+        if (password.length < 10 || !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d][A-Za-z\d!@#$%^&*()_+]{7,19}$/.test([password])) {
+            setError("The password must be 10 characters or longer, as well as contain an upper and lower case letter, a number, and a special character")
+            return
+        }
+        if (passwordConfirm !== password) {
+            setError("Passwords have to match")
+            return
+        }
+        createAccount()
     }
-  
-    // Log in a user using email and password
-    const logIn = async () => {
-    //console.log(email)
-    //console.log(password)
-    //this will send to the auth server
-        const response = await fetch('http://localhost:3081/auth', {
+
+    const createAccount = async () => {
+        //console.log(email)
+        //console.log(password)
+        //this will send to the auth server
+        const response = await fetch('http://localhost:3081/create-account', {
             method: 'POST',
             headers: {'Content-Type': 'application/json',},
             body: JSON.stringify({ email, password }),
@@ -48,7 +56,6 @@ export default function Login(props) {
 
         const result = await response.json()
         if (response.status === 200) {
-            //localStorage.setItem('user', JSON.stringify({ email, token: response.token }))
             await dexieDB.users.put({
                 email: email,
                 token: result.token,
@@ -58,18 +65,16 @@ export default function Login(props) {
         } else {
             window.alert('Wrong email or password')
         }
-        
     }
 
     return (
         <form className="container" onSubmit={handleSubmit}>
             <div className="height-row mb-3 w-75 mx-auto">
-                <input 
+            <input 
                     type="email" 
                     className="form-control" 
                     id="email" 
-                    placeholder="Email"
-                    value={props.user.isChecked ? props.user.email : null}/>
+                    placeholder="Email"/>
             </div>
             <div className="height-row mb-3 w-75 mx-auto">
                 <input 
@@ -78,23 +83,19 @@ export default function Login(props) {
                     id="password" 
                     placeholder="Password"/>
             </div>
-            <div className="height-row mb-2 w-75 mx-auto">
-                <button 
+            <div className="height-row mb-3 w-75 mx-auto">
+                <input
+                    type="password" 
+                    className="form-control" 
+                    id="passwordConfirm" 
+                    placeholder="Confirm password"/>
+            </div>
+            <div className="height-row mb-3 w-75 mx-auto">
+            <button 
                 className="button-action bg-action text-white form-control"
-                type="submit">Log In</button>
+                type="submit">Create Account</button>
             </div>
-            <p className="height-row my-0 mx-auto text-danger">{error}</p>
-            <div className="height-row mb-3 w-75 mx-auto text-start row">
-                <div className="col-md-6 text-center text-md-start">
-                    <input className="me-md-3" type="checkbox" id="remember" name="remember"/>
-                    <label className="h6" htmlFor="remember">Remember Email</label>
-                </div>
-                <div className="col-md-6 text-center">
-                    <a className="link-underline link-offset-3 link-underline-opacity-0 link-underline-opacity-100-hover float-md-end h6">
-                        Forgot Password
-                    </a>
-                </div>
-            </div>
+            <p className="height-row mb-3 mx-auto text-danger">{error}</p>
             <div className="container-fluid w-75">
                 <div className="row">
                     <hr className="border-2 col-4 col-md-5 my-auto"/>
@@ -103,10 +104,10 @@ export default function Login(props) {
                 </div>
             </div>
             <br/>
-            <div className="mb-3 w-75 mx-auto">
+            <div className="mb-1 w-75 mx-auto">
                 <button className="button-google text-primary form-control">
-                    <img className="me-3" src={("./assets/Google-Logo.png")} alt="Google Logo"/>
-                    Sign in with Google
+                    <img className="me-3" src={("../assets/Google-Logo.png")} alt="Google Logo"/>
+                    Sign up with Google
                 </button>
             </div>
             <br/>

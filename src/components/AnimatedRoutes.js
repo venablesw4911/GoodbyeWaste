@@ -1,7 +1,7 @@
 import {Route, Routes, useLocation} from "react-router-dom"
 import Landing from "./Landing.js"
-import AccountChange from "./AccountChange.js"
-import SearchResults from "./SearchResults.js"
+import AccountChange from "./Account/AccountChange.js"
+import SearchResults from "./Search/SearchResults.js"
 
 import {AnimatePresence} from "framer-motion"
 
