@@ -1,7 +1,5 @@
 import React, {useEffect, useState, useRef } from "react"
 import { Modal } from 'bootstrap'
-import PropTypes from 'prop-types'
-import PantryButton from "../../PantryButton.js";
 
 export default function RecipeModal(props) {
     const { recipe, isOpen, onClose } = props;
@@ -18,7 +16,6 @@ export default function RecipeModal(props) {
 
     // Synchronize the modal state with 'isOpen'
     useEffect(() => {
-        console.log(recipe)
         if (modalObj !== null) {
             if (isOpen) {
                 modalObj.show()
@@ -79,17 +76,3 @@ export default function RecipeModal(props) {
         </div>
     )
 }
-
-/*
-RecipeModal.propTypes = {
-    recipe: PropTypes.object,
-    isOpen: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired
-}
-
-RecipeModal.defaultProps = {
-    recipe: {
-        label: '',
-        image: ''
-    }
-}*/

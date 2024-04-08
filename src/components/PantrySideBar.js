@@ -25,8 +25,8 @@ export default function PantrySideBar(props) {
     const [selected, setSelected] = useState([])
     const categories = []
 
-    ingredientCategories.forEach((category) => {
-        categories.push(<PantryCategories category={category} ingredients={ingredientsArray} selected={selected} setSelected={setSelected}/>)
+    ingredientCategories.forEach((category, index) => {
+        categories.push(<PantryCategories key={index} category={category} ingredients={ingredientsArray} selected={selected} setSelected={setSelected}/>)
     })
 
     useEffect(() => {

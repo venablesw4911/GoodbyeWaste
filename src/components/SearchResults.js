@@ -1,7 +1,4 @@
 import React, { useState, useEffect  } from "react"
-import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as regularHeart} from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLocation } from "react-router-dom";
 import RecipeCard from './RecipeCard.js';
 import RecipeModal from "./RecipeModal.js";
@@ -43,7 +40,6 @@ export default function SearchResults(props) {
         const healthFilters = params.get("health");
         let searchFilters = '';
         let filters = [];
-        // console.log(searchQuery)
         if (dietFilter) {
             searchFilters += '&diet='+dietFilter;
             filters.push(dietFilter);
@@ -54,9 +50,7 @@ export default function SearchResults(props) {
                 filters.push(healthFilter);
             });
         }
-
         fetchSearchResults(searchQuery, searchFilters);
-
         setSearchFilters(filters);
         setSearch(searchQuery);
     }, [location.search]);
@@ -66,7 +60,7 @@ export default function SearchResults(props) {
             const response = await fetch(`https://api.edamam.com/search?q=${query}&app_id=ed3e6094&app_key=065fd89494e23e47cceae33090cf274d${filters}`);
             const data = await response.json();
             setSearchResult(data); // Store the fetched data in state
-            console.log(data)
+            //console.log(data)
         } catch (error) {
             console.error('Error fetching search results:', error);
         }

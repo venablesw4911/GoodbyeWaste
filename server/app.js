@@ -35,33 +35,11 @@ app.get('/get-favorites/:userId', async (req, res) => {
     }
 })
 
-//needs work
-app.put('/favorites', async (req, res) => {
+app.post('/favorite', async (req, res) => {
     const { userId, favoriteRecipeURI } = req.body
-    const collection = await db.collection("favorites")
-    try {
-        const entries = await collection.find({}).toArray()
-        let favorites = []
-        await entries.forEach(entry => {
-            if (entry.userId == userId) {
-                favorites.push(entry.favoriteRecipeURI)
-            }
-        })
-        res.status(200).json(favorites)
-    } catch (error) {
-        console.error('Error retrieving favorites:', error)
-        res.status(500).json({ message: 'Server error' })
-    }
-})
-
-//needs work
-app.delete('/favorites', async (req, res) => {
-    const { userId, favoriteRecipeURI } = req.body
-    const collection = await db.collection("favorites")
-
     try {
         // Add new userPantry item
-        await db.collection.insertOne({ userId, favoriteRecipeURI });
+        await db.collection("favorites").insertOne({ userId, favoriteRecipeURI });
         console.log("Added new favorite");
         return res.status(200).json({ message: "Favorite was added successfully" });
     } catch (error) {
@@ -69,6 +47,24 @@ app.delete('/favorites', async (req, res) => {
         return res.status(500).json({ error: "Internal server error" });
     }
 })
+
+app.delete('/favorite', async (req, res) => {
+    const { userId, favoriteRecipeURI } = req.body
+    try {
+        const result = await db.collection("favorites").deleteOne({ userId: userId, favoriteRecipeURI: favoriteRecipeURI });
+        if (result.deletedCount === 1) {
+            console.log("Favorite entry deleted");
+            return res.status(200).json({ message: "Favorite deleted successfully" });
+        } else {
+            console.log("Favorite entry not found");
+            return res.status(404).json({ error: "Favorite not found" });
+        }
+    } catch (error) {
+        console.error("Error while adding favorite:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+})
+
 
 app.get('/get-allergies', async (req, res) => {
     const collection = await db.collection("diets")

@@ -1,18 +1,13 @@
 import React, { useState, useEffect  } from "react"
-import { useLocation } from "react-router-dom";
 import { faHeart as solidHeart, faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as regularHeart} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function RecipeCard(props) {
     const { recipe, favorites, user, onClick } = props;
-    const location = useLocation();
     const [favorited, setFavorited] = useState(false)
 
-    // favorites.some(fav => fav.favoriteRecipeURI == recipe.uri);
-
     useEffect(() => {
-        //setFavorited(favorites.some(fav => fav.favoriteRecipeURI == recipe.uri))
         setFavorited(favorites.length > 0)
     }, [favorites])
 
