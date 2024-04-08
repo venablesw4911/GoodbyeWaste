@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {motion} from "framer-motion";
-import splash from "../assets/Login-Splash.webp"
+import splash from "../../../assets/Login-Splash.webp"
 import Login from "./Login.js";
 import Signup from "./Signup.js";
 

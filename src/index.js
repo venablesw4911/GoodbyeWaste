@@ -4,8 +4,8 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './index.css';
 import App from './components/App.js';
 import reportWebVitals from './reportWebVitals.js';
-import Planner from "./pages/Planner.js";
-import Profile from "./components/Profile.js";
+import Planner from "./components/Pages/Planner/Planner.js";
+import Profile from "./components/Pages/Account/Profile.js";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
