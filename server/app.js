@@ -17,14 +17,27 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// Basic home route for the API
-// app.get('/', (_req, res) => {
-//     res.send('Auth API.\nPlease use POST /auth & POST /verify for authentication')
-//   })
-
 app.get('/get-favorites/:userId', async (req, res) => {
   const collection = await db.collection("favorites")
   const userId = req.params.userId  //not working
+  try {
+    const entries = await collection.find({}).toArray()
+    let favorites = []
+    await entries.forEach(entry => {
+      if (entry.userId == userId) {
+        favorites.push(entry)
+      }
+    })
+    res.status(200).json(favorites)
+  } catch (error) {
+    console.error('Error retrieving favorites:', error)
+    res.status(500).json({ message: 'Server error' })
+  }
+})
+
+app.put('/favorites', async (req, res) => {
+  const { userId, favoriteRecipeURI } = req.body
+  const collection = await db.collection("favorites")
   try {
     const entries = await collection.find({}).toArray()
     let favorites = []
@@ -37,6 +50,21 @@ app.get('/get-favorites/:userId', async (req, res) => {
   } catch (error) {
     console.error('Error retrieving favorites:', error)
     res.status(500).json({ message: 'Server error' })
+  }
+})
+
+app.delete('/favorites', async (req, res) => {
+  const { userId, favoriteRecipeURI } = req.body
+  const collection = await db.collection("favorites")
+
+  try {
+    // Add new userPantry item
+    await db.collection.insertOne({ userId, favoriteRecipeURI });
+    console.log("Added new favorite");
+    return res.status(200).json({ message: "Favorite was added successfully" });
+  } catch (error) {
+    console.error("Error while adding favoite:", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 })
 
