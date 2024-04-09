@@ -94,7 +94,7 @@ export default function Header(props) {
                                     data-bs-target="#collapseExample"
                                     onClick={toggleCollapse}
                                     aria-expanded={showSearchFilters}>
-                                All
+                                Filters
                             </button>
                             <input type="text" className="form-control clickable border-end-0" placeholder="Search"
                                    aria-label="Search"
