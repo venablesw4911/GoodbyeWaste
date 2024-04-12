@@ -41,7 +41,7 @@ export default function SearchResults() {
 
     const fetchSearchResults = async (query, filters) => {
         try {
-            const response = await fetch(`https://api.edamam.com/search?q=${query}&app_id=ed3e6094&app_key=065fd89494e23e47cceae33090cf274d${filters}`);
+            const response = await fetch(`https://api.edamam.com/search?q=${query}&app_id=59a04cb8&app_key=6e5b27f255727ba299ffd61e2ca5f5ed${filters}`);
             const data = await response.json();
             setSearchResult(data); // Store the fetched data in state
             console.log(data)
