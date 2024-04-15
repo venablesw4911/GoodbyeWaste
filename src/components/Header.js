@@ -148,7 +148,7 @@ export default function Header(props) {
                                                 </a>
                                                 <ul className="dropdown-menu">
                                                     <li><a className="dropdown-item link-primary"
-                                                           href="#">View Profile</a></li>
+                                                           href="#" onClick={navigate('/profile')}>View Profile</a></li>
                                                     <li><a className="dropdown-item link-primary" href="#">Dietary Preferences</a></li>
                                                     <li>
                                                         <hr className="dropdown-divider"/>

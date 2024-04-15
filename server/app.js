@@ -252,6 +252,23 @@ app.get('/get-user', async (req, res) => {
   }
 });
 
+app.get('/get-ingredients', async (req, res) => {
+  try {
+
+    const ingredients = await db.collection('ingredients').find()
+    const categories = await db.collection('ingredientCategories').find()
+    if (ingredients && categories) {
+      res.json({
+      });
+    } else {
+      res.status(404).json({ message: 'Ingredients or Categories not found' });
+    }
+  } catch (error) {
+    console.error('Error retrieving ingredients:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 // Setter requests for first name
 app.post('/set-first', async (req, res) => {
   try {
