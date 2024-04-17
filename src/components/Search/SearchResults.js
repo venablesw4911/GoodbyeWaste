@@ -72,18 +72,19 @@ export default function SearchResults(props) {
     }
 
     return (
-        <div className="bgColor row">
+        <div className="bg-color row">
             <div className="col-auto">
                 <PantrySideBar setPantryItems={setPantryItems}/>
             </div>
-            <div className="col-10 col-md-9 col-lg-8 col-xl-7 mx-auto my-4">
+            <div className="col-10 col-md-9 col-lg-8 col-xl-7 my-4">
                 <div className="mt-3 mb-2 d-flex justify-content-center flex-wrap">
                     {searchFilters.map((filter, index) => (
+                        <span className="badge rounded-pill text-secondary border border-secondary my-1 mx-2">{filter}</span>
                         <span key={index} className="badge rounded-pill text-secondary border border-secondary my-1 mx-2">{filter}</span>
                     ))}
                 </div>
                 {searchResult ? (
-                    <div className="list-group">
+                    <div className="row m-auto">
                         {searchResult.hits.map((recipe, index) => (
                             <RecipeCard
                                 key={index}
