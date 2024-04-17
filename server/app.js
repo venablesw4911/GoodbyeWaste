@@ -299,8 +299,9 @@ app.post('/set-last', async (req, res) => {
 // Setter requests for dietary preferences
 app.post('/set-pref', async (req, res) => {
   try {
-      const { userId, dietaryPreferences } = req.body;
-      
+      let { userId, dietaryPreferences } = req.body;
+      dietaryPreferences = parseInt(dietaryPreferences)
+
       const result = await db.collection('user').updateOne(
           { userId },
           { $set: { dietaryPreferences } },
