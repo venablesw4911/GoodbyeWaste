@@ -30,7 +30,7 @@ export default function SearchResults(props) {
         if (user?.loggedIn) {
             fetchFavorites()
         }
-    }, []);
+    }, [user]);
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -53,7 +53,7 @@ export default function SearchResults(props) {
         fetchSearchResults(searchQuery, searchFilters);
         setSearchFilters(filters);
         setSearch(searchQuery);
-    }, [location.search]);
+    }, [location.search, pantryItems]);
 
     const fetchSearchResults = async (query, filters) => {
         try {
@@ -80,6 +80,7 @@ export default function SearchResults(props) {
                 <div className="mt-3 mb-2 d-flex justify-content-center flex-wrap">
                     {searchFilters.map((filter, index) => (
                         <span className="badge rounded-pill text-secondary border border-secondary my-1 mx-2">{filter}</span>
+                        <span key={index} className="badge rounded-pill text-secondary border border-secondary my-1 mx-2">{filter}</span>
                     ))}
                 </div>
                 {searchResult ? (

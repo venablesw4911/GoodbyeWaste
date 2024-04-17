@@ -72,6 +72,25 @@ export default function Header(props) {
     navigate('/planner')
   }
 
+                    <form className="col-5 col-lg-4" role="search" onSubmit={handleSearch}>
+                        <div className="input-group">
+                            <button className="btn btn-outline-primary dropdown-toggle"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#collapseExample"
+                                    onClick={toggleCollapse}
+                                    aria-expanded={showSearchFilters}>
+                                Filters
+                            </button>
+                            <input type="text" className="form-control clickable border-end-0" placeholder="Search"
+                                   aria-label="Search"
+                                   onChange={(event) => setSearchText(event.target.value)}/>
+                            <label className="input-group-text bg-white border-start-0" onClick={handleSearch}>
+                                <FontAwesomeIcon icon={faMagnifyingGlass} size="lg"
+                                                 style={{cursor: "pointer", color: "#ced4da"}}/>
+                            </label>
+                        </div>
+                    </form>
 
   const onButtonClick = e => {
     if (props.user.loggedIn) {
