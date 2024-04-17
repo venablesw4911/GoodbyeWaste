@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.get('/userMeals/:userId', async (req, res) => {
     const collection = await db.collection("userMeals")
-    const userId = req.params.userId
+    const userId = parseInt(req.params.userId)
     try {
         const entry = await collection.findOne({ userId })
         res.status(200).json(entry.plannedMeals)

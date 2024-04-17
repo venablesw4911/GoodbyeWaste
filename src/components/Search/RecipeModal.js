@@ -29,22 +29,24 @@ export default function RecipeModal(props) {
 
     useEffect(() => {
         async function getPlanner() {
-            console.log(user.userId)
             try {
                 const response = await fetch(`http://localhost:3081/userMeals/${user.userId}/`, {
                     method: 'GET'
                 })
                 if (response.status === 200) {
-                    await setPlanner(response.json())
-                    await console.log(response.json())
+                    const resultPlanner = await response.json()
+                    setPlanner(resultPlanner)
+                    //console.log(resultPlanner)
                 }
             } catch (error) {
                 console.error('Error planner retrieval failed:', error)
             }
         }
 
-        getPlanner()
-    }, [])
+        if (user.userId !== 0) {
+            getPlanner()
+        }
+    }, [user.userId])
 
     async function updatePlanner() {
         try {
