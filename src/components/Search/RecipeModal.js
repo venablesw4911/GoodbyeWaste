@@ -2,15 +2,17 @@ import React, {useEffect, useState, useRef } from "react"
 import { Modal } from 'bootstrap'
 
 export default function RecipeModal(props) {
-    const { recipe, isOpen, onClose } = props;
+    const { user, recipe, isOpen, onClose } = props;
+
+    const [planner, setPlanner] = useState({})
+    const [showPlanner, setShowPlanner] = useState(false)
 
     // Create a forward reference
     const modalRef = useRef()
-
     const [modalObj, setModalObj] = useState(null)
     useEffect(() => {
         if (modalRef.current && modalObj === null) {
-            setModalObj(new Modal(modalRef.current), { backdrop: 'static' })
+            setModalObj(new Modal(modalRef.current, { backdrop: 'static' }))
         }
     }, [modalObj])
 
@@ -25,13 +27,49 @@ export default function RecipeModal(props) {
         }
     }, [isOpen, modalObj])
 
+    useEffect(() => {
+        async function getPlanner() {
+            console.log(user.userId)
+            try {
+                const response = await fetch(`http://localhost:3081/userMeals/${user.userId}/`, {
+                    method: 'GET'
+                })
+                if (response.status === 200) {
+                    await setPlanner(response.json())
+                    await console.log(response.json())
+                }
+            } catch (error) {
+                console.error('Error planner retrieval failed:', error)
+            }
+        }
+
+        getPlanner()
+    }, [])
+
+    async function updatePlanner() {
+        try {
+            const response = await fetch(`http://localhost:3081/userMeals/${user.userId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(planner)
+            })
+            if (response.status === 200) {
+                await setPlanner(response.json())
+                await console.log(response.json())
+            }
+        } catch (error) {
+            console.error('Error planner update failed:', error)
+        }
+    }
+
     return (
         <div ref={modalRef} className="modal fade modal-lg">
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h1 className="modal-title fs-5" id="detailsModalLabel">
-                            {/*title*/}
+                        <h1 className="modal-title fs-5" id="detailsModalLabel">RecipeModal.js
                             {recipe.label}
                         </h1>
 
@@ -44,10 +82,6 @@ export default function RecipeModal(props) {
                     </div>
 
                     <div className="modal-body" id="detailsModalBody">
-                        {/*children*/}
-                        {/*<div className="row">
-                            favorited?
-                        </div>*/}
                         <div className="row">
                             <div className="col-6">
                                 <img src={recipe.image} alt="recipe image" className="w-100"/>

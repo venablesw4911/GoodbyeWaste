@@ -23,7 +23,9 @@ export default function SearchResults(props) {
     useEffect(() => {
         // Fetch allergy diets when component mounts
         async function fetchFavorites() {
-            const response = await fetch(`http://localhost:3081/get-favorites/${user.userId}/`)
+            const response = await fetch(`http://localhost:3081/favorite/${user.userId}/`, {
+                method: 'GET'
+            })
             const favorites = await response.json()
             setFavorites(favorites)
         }
@@ -98,6 +100,7 @@ export default function SearchResults(props) {
                 )}
             </div>
             <RecipeModal
+                user={user}
                 recipe={recipeDetails}
                 isOpen={detailsOpen}
                 onClose={() => {
