@@ -17,9 +17,76 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.get('/get-favorites/:userId', async (req, res) => {
+
+app.get('/userMeals/:userId', async (req, res) => {
+    const collection = await db.collection("userMeals")
+    const userId = req.params.userId
+    try {
+        const entry = await collection.findOne({ userId })
+        res.status(200).json(entry.plannedMeals)
+    } catch (error) {
+        console.error('Error retrieving meals:', error)
+        res.status(500).json({ message: 'Server error' })
+    }
+})
+
+app.post('/userMeals/:userId', async (req, res) => {
+    const userId = parseInt(req.params.userId)
+    const plannedMeals = req.body
+    const collection = await db.collection("userMeals")
+
+    // Check JSON validity
+    if (typeof plannedMeals !== 'object' || plannedMeals === null || Object.keys(plannedMeals).length === 0) {
+        return res.status(400).json({ error: 'Invalid JSON planner data' })
+    }
+
+    // Check that user has planner
+    const hasPlanner = await collection.findOne({userId})
+    if (!hasPlanner) {
+        try {
+            // Add new userPantry item
+            await collection.insertOne({ plannedMeals, userId });
+            console.log("Created a new Planner");
+            return res.status(200).json({ message: "Planner was created successfully" });
+        } catch (error) {
+            console.error("Error while creating planner:", error);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    try {
+        // Update planner for user
+        await db.collection("userMeals").updateOne( { userId },
+            {
+                $set: {
+                    plannedMeals
+                }
+            }
+        )
+        console.log("Updated planner");
+        return res.status(200).json({ message: "Planner was updated successfully" });
+    } catch (error) {
+        console.error("Error while updating planner:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+})
+
+app.post('/favorite', async (req, res) => {
+    const { userId, favoriteRecipeURI } = req.body
+    try {
+        // Add new userPantry item
+        await db.collection("favorites").insertOne({ userId, favoriteRecipeURI });
+        console.log("Added new favorite");
+        return res.status(200).json({ message: "Favorite was added successfully" });
+    } catch (error) {
+        console.error("Error while adding favoite:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+})
+
+app.get('/favorite/:userId', async (req, res) => {
     const collection = await db.collection("favorites")
-    const userId = req.params.userId  //not working
+    const userId = req.params.userId
     try {
         const entries = await collection.find({}).toArray()
         let favorites = []
