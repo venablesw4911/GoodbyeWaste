@@ -57,7 +57,7 @@ export default function SearchResults(props) {
 
     const fetchSearchResults = async (query, filters) => {
         try {
-            const response = await fetch(`https://api.edamam.com/search?q=${query}&app_id=ed3e6094&app_key=065fd89494e23e47cceae33090cf274d${filters}`);
+            const response = await fetch(`https://api.edamam.com/search?q=${query}&app_id=59a04cb8&app_key=6e5b27f255727ba299ffd61e2ca5f5ed${filters}`);
             const data = await response.json();
             setSearchResult(data); // Store the fetched data in state
             //console.log(data)
@@ -72,18 +72,18 @@ export default function SearchResults(props) {
     }
 
     return (
-        <div className="bgColor row">
+        <div className="bg-color row">
             <div className="col-auto">
                 <PantrySideBar setPantryItems={setPantryItems}/>
             </div>
-            <div className="col-10 col-md-9 col-lg-8 col-xl-7 mx-auto my-4">
+            <div className="col-10 col-md-9 col-lg-8 col-xl-7 my-4">
                 <div className="mt-3 mb-2 d-flex justify-content-center flex-wrap">
                     {searchFilters.map((filter, index) => (
-                        <span class="badge rounded-pill text-secondary border border-secondary my-1 mx-2">{filter}</span>
+                        <span className="badge rounded-pill text-secondary border border-secondary my-1 mx-2">{filter}</span>
                     ))}
                 </div>
                 {searchResult ? (
-                    <div className="list-group">
+                    <div className="row m-auto">
                         {searchResult.hits.map((recipe, index) => (
                             <RecipeCard
                                 key={index}

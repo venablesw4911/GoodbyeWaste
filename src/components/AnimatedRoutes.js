@@ -2,6 +2,7 @@ import {Route, Routes, useLocation} from "react-router-dom"
 import Landing from "./Landing.js"
 import AccountChange from "./Account/AccountChange.js"
 import SearchResults from "./Search/SearchResults.js"
+import Planner from "./Planner/Planner.js"
 
 import {AnimatePresence} from "framer-motion"
 
@@ -15,6 +16,7 @@ export default function AnimatedRoutes(props) {
                 <Route path="/" element={<Landing/>}/>
                 <Route path="/login" element={<AccountChange {...props}/>}/>
                 <Route path="/search" element={<SearchResults {...props}/>}/>
+                <Route path="/planner" element={<Planner/>}/>
             </Routes>
         </AnimatePresence>
     )

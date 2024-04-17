@@ -4,7 +4,6 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './index.css';
 import App from './components/App.js';
 import reportWebVitals from './reportWebVitals.js';
-import Planner from "./components/Planner/Planner.js";
 import Profile from "./components/Account/Profile.js";
 
 const container = document.getElementById("root");
@@ -15,8 +14,6 @@ root.render(
             <Routes>
                 <Route path="*" element={<App/>}></Route>
                 <Route path="/profile" element={<Profile />}/>
-                <Route path="/planner" element={<Planner/>}/>
-
             </Routes>
         </BrowserRouter>
     </React.StrictMode>

@@ -57,7 +57,7 @@ export default function App(props) {
     }, [userState, user])
 
     return (
-        <div className="overflow-x-hidden min-vh-100 bgColor">
+        <div className="overflow-x-hidden min-vh-100 home-bg">
             <Header user={user}/>
             <AnimatedRoutes user={user}/>
             <Footer/>
