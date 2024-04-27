@@ -17,9 +17,139 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.get('/get-favorites/:userId', async (req, res) => {
+app.get('/recipeByURI', async (req, res) => {
+    const { recipeId } = req.body
+    const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${recipeId}&app_id=59a04cb8&app_key=6e5b27f255727ba299ffd61e2ca5f5ed&field=label&field=image&field=uri`
+    try {
+        const response = await fetch(url)
+        const data = await response.json()
+        res.status(200).json(data.hits[0].recipe)
+    } catch (error) {
+        console.error('Error fetching recipeByURI:', error)
+    }
+})
+
+app.get('/planner/:userId', async (req, res) => {
+    const collection = await db.collection("userMeals")
+    const userId = parseInt(req.params.userId)
+    try {
+        const entry = await collection.findOne({ userId })
+        const meals = entry.plannedMeals
+        const planner = {
+            breakfast: [],
+            lunch: [],
+            dinner: []
+        }
+        for (const meal of meals.breakfast) {
+            const id = meal.mealURI.split('_')[1]
+            const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${id}&app_id=59a04cb8&app_key=6e5b27f255727ba299ffd61e2ca5f5ed&field=label&field=image&field=uri`
+            const response = await fetch(url)
+            const data = await response.json()
+            const recipe = data.hits[0].recipe
+            planner.breakfast.push({
+                mealName: recipe.label,
+                mealURI: recipe.uri,
+                mealImage: recipe.image
+            })
+        }
+        for (const meal of meals.lunch) {
+            const id = meal.mealURI.split('_')[1]
+            const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${id}&app_id=59a04cb8&app_key=6e5b27f255727ba299ffd61e2ca5f5ed&field=label&field=image&field=uri`
+            const response = await fetch(url)
+            const data = await response.json()
+            const recipe = data.hits[0].recipe
+            planner.lunch.push({
+                mealName: recipe.label,
+                mealURI: recipe.uri,
+                mealImage: recipe.image
+            })
+        }
+        for (const meal of meals.dinner) {
+            const id = meal.mealURI.split('_')[1]
+            const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${id}&app_id=59a04cb8&app_key=6e5b27f255727ba299ffd61e2ca5f5ed&field=label&field=image&field=uri`
+            const response = await fetch(url)
+            const data = await response.json()
+            const recipe = data.hits[0].recipe
+            planner.dinner.push({
+                mealName: recipe.label,
+                mealURI: recipe.uri,
+                mealImage: recipe.image
+            })
+        }
+        res.status(200).json(planner)
+    } catch (error) {
+        console.error('Error retrieving planner:', error)
+        res.status(500).json({ message: 'Server error' })
+    }
+})
+
+app.post('/planner/:userId', async (req, res) => {
+    const userId = parseInt(req.params.userId)
+    let plannedMeals = req.body
+    const collection = await db.collection("userMeals")
+
+    function removeField(objects, fieldName) {
+        objects.forEach(obj => {
+            delete obj[fieldName];
+        });
+    }
+
+    removeField(plannedMeals.breakfast, 'mealImage')
+    removeField(plannedMeals.lunch, 'mealImage')
+    removeField(plannedMeals.dinner, 'mealImage')
+
+    // Check JSON validity
+    if (typeof plannedMeals !== 'object' || plannedMeals === null || Object.keys(plannedMeals).length === 0) {
+        return res.status(400).json({ error: 'Invalid JSON planner data' })
+    }
+
+    // Check that user has planner
+    const hasPlanner = await collection.findOne({userId})
+    if (!hasPlanner) {
+        try {
+            // Add new userPantry item
+            await collection.insertOne({ plannedMeals, userId });
+            console.log("Created a new Planner");
+            return res.status(200).json({ message: "Planner was created successfully" });
+        } catch (error) {
+            console.error("Error while creating planner:", error);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    try {
+        // Update planner for user
+        await db.collection("userMeals").updateOne( { userId },
+            {
+                $set: {
+                    plannedMeals
+                }
+            }
+        )
+        console.log("Updated planner");
+        return res.status(200).json({ message: "Planner was updated successfully" });
+    } catch (error) {
+        console.error("Error while updating planner:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+})
+
+app.post('/favorite', async (req, res) => {
+    const { userId, favoriteRecipeURI } = req.body
+    try {
+        // Add new userPantry item
+        await db.collection("favorites").insertOne({ userId, favoriteRecipeURI });
+        console.log("Added new favorite");
+        return res.status(200).json({ message: "Favorite was added successfully" });
+    } catch (error) {
+        console.error("Error while adding favoite:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+})
+
+app.get('/favorite/:userId', async (req, res) => {
     const collection = await db.collection("favorites")
-    const userId = req.params.userId  //not working
+    const userId = req.params.userId
     try {
         const entries = await collection.find({}).toArray()
         let favorites = []
