@@ -44,6 +44,22 @@ export default function Header(props) {
         fetchAllergyDiets();
     }, []);
 
+    useEffect(() => {
+        // Fetch user's dietary preferences
+        async function fetchDietaryPreferences() {
+            try {
+                //const response = await fetch(`http://localhost:3081/get-user-dietary-preferences?findUserId=${userId}`);
+                //const preferences = await response.json();
+                //setDietaryPreferences(preferences);
+            } catch (err) {
+                console.error('Failed to retrieve dietary preferences');
+                console.error(err);
+            }
+        }
+
+        fetchDietaryPreferences();
+    }, []);
+
     // On change of location, hide search filters collapse
     useEffect(() => {
         setShowSearchFilters(false); // Close the navigation panel

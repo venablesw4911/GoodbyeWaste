@@ -1,45 +1,88 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import pfp from "../../assets/pfp.png"
 import ProfileInput from "./ProfileInput.js";
-import { useNavigate } from "react-router-dom"
-import { dexieDB } from "../../dexieDB.js"
+import { useNavigate, useLocation } from "react-router-dom"
 
 export default function Profile(props) {
-    //const value = localStorage.getItem('user')
-    //let email = JSON.stringify(JSON.parse(value)).replace('"{\\"email\\":\\"', '').replace('\\"}"', '')
-    
-    let favorites = ['Pasta', 'Hamburger', 'Pizza']
-    let firstName
-    let lastName
-    let dietaryPreferences
-    const [error, setError] = useState("")
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    // FIX THIS
-    //Change this when our userID is collected by the router?
+  /*
+  // State to hold the user's ID
+  const [userId, setUserId] = useState(null);
+
+  //if login works?
+  useEffect(() => {
+      // Check if user data is available in localStorage
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user && user.id) {
+          // Set the user ID from localStorage
+          setUserId(user.id);
+      } else {
+          // Redirect to login page if user data is not available
+          navigate("/login", { state: { from: location.pathname } });
+      }
+  }, [navigate, location]);
+  */
+
     let userId = 1;
 
-    const navigate = useNavigate()
+    const [buttons, setButtons] = useState([]);
+    const [selectedButtons, setSelectedButtons] = useState([]);
 
-    function display () {
-        let output = favorites.join('\n')
-        return alert(output)
+    let firstName;
+    let lastName;
+    const [error, setError] = useState("");
+
+    const allergies = ['Celery-Free', 'Crustacean-Free', 'Dairy-Free', 'Egg-Free', 'Fish-Free', 'Gluten-Free', 'Lupine-Free', 'Mustard-Free', 'Peanut-Free', 'Sesame-Free', 'Shellfish-Free', 'Soy-Free', 'Tree-Nut-Free', 'Wheat-Free'];
+    const health = ['Vegetarian', 'Vegan', 'Pork-Free', 'Red-Meat-Free', 'Keto', 'Kosher', 'Low-Sugar', 'Paleo', 'Pescatarian'];
+    const diets = ['High-Fiber', 'Balanced', 'High-Protein', 'Low-Carb', 'Low-Fat', 'Low-Sodium'];
+
+    // Fetch data from the database when the component mounts
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await fetch(`http://localhost:3081/get-user-dietary-preferences?findUserId=${userId}`);
+                const dietaryPreferences = await response.json();
+                const selectedLabels = dietaryPreferences.map(pref => pref.dietLabel);
+                setSelectedButtons(selectedLabels);
+            } catch (err) {
+                console.error('Failed to retrieve user dietary preferences');
+                console.error(err);
+            }
+        }
+
+        fetchData();
+    }, [userId]);
+
+    const handleCheckboxChange = (e) => {
+        const { name, checked, value } = e.target;
+
+        if (checked) {
+            setSelectedButtons(prevState => [...prevState, value]);
+        } else {
+            setSelectedButtons(prevState => prevState.filter(item => item !== value));
+        }
     }
 
     const handleSubmit = async (event, userId) => {
         event.preventDefault();
         let firstNameBox = event.target.firstName.value;
         let lastNameBox = event.target.lastName.value;
-        let dietaryPreferencesBox = event.target.dietaryPreferences.value;
-    
+
         if (userId) {
+            let hasChanges = false;
             if (firstNameBox) {
                 setFirstName(userId, firstNameBox)
+                hasChanges = true;
             } 
             if (lastNameBox) {
                 setLastName(userId, lastNameBox)
+                hasChanges = true;
             }
-            if (dietaryPreferencesBox) {
-                setDietaryPreferences(userId, dietaryPreferencesBox)
+
+            if (hasChanges) {
+                alert("Name changes submitted successfully! Please refresh the page");
             } else {
                 setError("No changes to update.");
             }
@@ -47,7 +90,42 @@ export default function Profile(props) {
             setError("User ID not provided.");
         }
     }
-    
+
+    const handleButtonSubmit = async (event) => {
+        event.preventDefault();
+
+        // Fetch diet IDs for selected checkboxes
+        const dietIDs = await findDietIDs(selectedButtons);
+
+        // Example: Call a function to update dietary preferences
+        await setDietaryPreferences(userId, dietIDs);
+
+        // Reset selectedButtons state
+        setSelectedButtons([]);
+
+        alert("Dietary preferences submitted successfully! Please refresh the page");
+    }
+
+    const findDietIDs = async (selectedButtons) => {
+        try {
+            const dietIDs = [];
+            // Iterate over each element in selectedButtons array
+            for (const button of selectedButtons) {
+                // Fetch dietID for each button using /get-diet-id endpoint
+                const response = await fetch(`http://localhost:3081/get-diet-id?name=${button}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+                const result = await response.json();
+                // Push the retrieved dietID to the dietIDs array
+                dietIDs.push(result.dietID);
+            }
+            return dietIDs;
+        } catch (error) {
+            console.error('Error fetching diet IDs:', error);
+            return [];
+        }
+    };      
 
     // setFirstName
     const setFirstName = async (userId, firstName) => {
@@ -60,9 +138,9 @@ export default function Profile(props) {
         const result = await response.json();
         if (response.status === 200) {
             // Update user data in local database or perform other actions if needed
-            //navigate('/');
+            //navigate('/profile');
         } else {
-            window.alert('Error setting first name');
+        
         }
     }
 
@@ -77,96 +155,151 @@ export default function Profile(props) {
         const result = await response.json();
         if (response.status === 200) {
             // Update user data in local database or perform other actions if needed
-            //navigate('/');
+            //navigate('/profile');
         } else {
-        window.alert('Error setting last name');
+          
         }
     }
 
     // setDietaryPreferences
-    const setDietaryPreferences = async (userId, dietaryPreferences) => {
-        const response = await fetch('http://localhost:3081/set-pref', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ userId, dietaryPreferences }),
-        });
+    const setDietaryPreferences = async (userId, dietIDs) => {
+        try {
+            const response = await fetch('http://localhost:3081/set-pref', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId, dietIDs }),
+            });
 
-        const result = await response.json();
-        if (response.status === 200) {
-            // Update user data in local database or perform other actions if needed
-            //navigate('/');
-        } else {
+            if (response.status === 200) {
+                // Update user data in local database or perform other actions if needed
+                //navigate('/profile');
+                const result = await response.json();
+                console.log(result.message);
+            } else {
+                window.alert('Error setting dietary preferences');
+            }
+        } catch (error) {
+            console.error('Error setting dietary preferences:', error);
             window.alert('Error setting dietary preferences');
         }
     }
 
     return (
-        <><div className='bgColor d-flex w-100 m-auto justify-content-evenly'>
-            <div style={{ backgroundColor: "#fff6e8" }} className='border border-black w-25 d-flex flex-column justify-content-between vh-100'>
+        <>
+            <div className='bgColor d-flex w-100 m-auto justify-content-evenly'>
+                <div style={{ backgroundColor: "#fff6e8" }} className='border border-black w-25 d-flex flex-column justify-content-between vh-200'>
+                    <div className='mt-4 d-flex flex-column align-items-center'>
+                        <img src={pfp} alt="Default" className='w-25' />
+                        <h2 className='mt-4'>Sample Name</h2>
+                    </div>
+                </div>
 
-                <div className='d-flex flex-column align-items-center'>
-                    <img src={pfp} alt="Default" className='w-25' />
-                    <h2 className='mt-4'>John Doe</h2>
-                    <h2 className='mt-4'>HI</h2>
-                    <a href='/Profile'>
-                        <button className='text-center button-profile' onClick={display}>Favorites</button>
-                    </a>
-                </div>
-                <div>
-                    <a href='/Profile'>
-                        <h4 className='text-center'>Delete</h4>
-                    </a>
-                </div>
-            </div>
+                <div className=" d-flex justify-content-between">
+                    {/* Allergies Box */}
+                    <div className="border border-black card card-body rounded-0" style={{ backgroundColor: "#fff6e8", width: '100% !important' }}>
+                        <h5>Allergies</h5>
+                        <ul className="p-0" style={{ listStyleType: "none" }}>
+                            {allergies.map((item, index) => (
+                                <li key={0 + index} className="my-1">
+                                    <input
+                                        className="form-check-input me-1"
+                                        type="checkbox"
+                                        value={item}
+                                        id={'allergy-' + index}
+                                        onChange={handleCheckboxChange}
+                                        checked={selectedButtons.includes(item)} // Check if item is in selectedButtons
+                                    />
+                                    <label className="form-check-label small" htmlFor={'allergy-' + index}>
+                                        {item}
+                                    </label>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
-            <div style={{ backgroundColor: "#fff6e8" }} className='border border-black w-50 d-flex '>
-                <div className='border border-black w-50'>
-                    <ProfileInput type='text' labelName='First Name' placeholder='John' />
-                    <ProfileInput type='text' labelName='Email' placeholder='hi' />
-                    <ProfileInput type='text' labelName='Password' placeholder='**********' />
-                </div>
-                <div style={{ backgroundColor: "#fff6e8" }} className='border border-black w-50'>
-                    <ProfileInput type='text' labelName='Last Name' placeholder='John' />
-                    <ProfileInput type='text' labelName='Gender' placeholder='hi' />
-                    <button className='button-profile'>Edit</button>
-                </div>
-            </div>
+                    {/* Diets Box */}
+                    <div className="border border-black card card-body rounded-0" style={{backgroundColor: "#fff6e8", width: '100% !important' }}>
+                        <h5>Diets</h5>
+                        <ul className="p-0" style={{ listStyleType: "none" }}>
+                            {health.map((item, index) => (
+                                <li key={1 + index} className="my-1">
+                                    <input
+                                        className="form-check-input me-1"
+                                        type="checkbox"
+                                        value={item}
+                                        id={'diet-' + index}
+                                        onChange={handleCheckboxChange}
+                                        checked={selectedButtons.includes(item)} // Check if item is in selectedButtons
+                                    />
+                                    <label className="form-check-label small" htmlFor={'diet-' + index}>
+                                        {item}
+                                    </label>
+                                </li>
+                            ))}
+                            {diets.map((item, index) => (
+                                <li key={2 + index} className="my-1">
+                                    <input
+                                        className="form-check-input me-1"
+                                        type="checkbox"
+                                        value={item}
+                                        id={'diet-' + (index + health.length)}
+                                        onChange={handleCheckboxChange}
+                                        checked={selectedButtons.includes(item)} // Check if item is in selectedButtons
+                                    />
+                                    <label className="form-check-label small" htmlFor={'diet-' + (index + health.length)}>
+                                        {item}
+                                    </label>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
-            <h2 className='mt-4'>Enter your change(s)</h2>
-            
-            <form className="container" onSubmit={(event) => handleSubmit(event, userId)}>
-            <div className="height-row mb-3 w-75 mx-auto">
-                <input
-                    type="text"
-                    className="form-control"
-                    id="firstName"
-                    name="firstName"
-                    placeholder="First Name" />
-            </div>
-            <div className="height-row mb-3 w-75 mx-auto">
-                <input
-                    type="text"
-                    className="form-control"
-                    id="lastName"
-                    name="lastName" 
-                    placeholder="Last Name" />
-            </div>
-            <div className="height-row mb-3 w-75 mx-auto">
-                <input
-                    type="text"
-                    className="form-control"
-                    id="dietaryPreferences"
-                    name="dietaryPreferences" 
-                    placeholder="Dietary Preferences" />
-            </div>
-                <div className="height-row mb-2 w-75 mx-auto">
-                    <button
-                        className="button-action bg-action text-white form-control"
-                        type="submit">Submit Changes</button>
+                    <div>
+                        <div className="mt-4 height-row mb-2 w-75 mx-auto">
+                            <form className="container " onSubmit={(event) => handleButtonSubmit(event, userId)}>
+                                <p> Submit your diet and allergies changes </p>
+                                <button
+                                    className="button-action bg-action text-white form-control"
+                                    type="submit"
+                                >
+                                    Submit Changes
+                                </button>
+                            </form>
+                        </div>
+
+                        <form className="container " onSubmit={(event) => handleSubmit(event, userId)}>
+                            <h2 className='mt-4'>Enter a new first or last name below</h2>
+                            <div className="height-row mb-3 w-75 mx-auto">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="firstName"
+                                    name="firstName"
+                                    placeholder="First Name"
+                                />
+                            </div>
+                            <div className="height-row mb-3 w-75 mx-auto">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="lastName"
+                                    name="lastName"
+                                    placeholder="Last Name"
+                                />
+                            </div>
+
+                            <div className="height-row mb-2 w-75 mx-auto">
+                                <button
+                                    className="button-action bg-action text-white form-control"
+                                    type="submit"
+                                >
+                                    Submit Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <br />
-            </form>
-        </div>
-</>
-    )
+            </div>
+        </>
+    );
 }
