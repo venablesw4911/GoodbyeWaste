@@ -338,6 +338,50 @@ app.post('/create-account', async (req, res) => {
   
 })
 
+app.get('/get-firstName', async (req, res) => {
+  let { userId } = req.query;
+  userId = parseInt(userId);
+
+  try {
+    // Find the user by userId
+    const user = await db.collection("user").findOne({ userId: userId });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Grab the user's firstName
+    const firstName = user.firstName;
+
+    res.status(200).json(firstName);
+  } catch (error) {
+    console.error('Error retrieving user first name', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+})
+
+app.get('/get-lastName', async (req, res) => {
+  let { userId } = req.query;
+  userId = parseInt(userId);
+
+  try {
+    // Find the user by userId
+    const user = await db.collection("user").findOne({ userId: userId });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Grab the user's lastName
+    const lastName = user.lastName;
+
+    res.status(200).json(lastName);
+  } catch (error) {
+    console.error('Error retrieving user last name', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+})
+
 app.post('/pantry-insert', async (req, res) => {
   // Extract data from query parameters
   let { userId, ingredientID, amount } = req.query;

@@ -163,8 +163,7 @@ export default function Header(props) {
                                                     Account
                                                 </a>
                                                 <ul className="dropdown-menu">
-                                                    <li><a className="dropdown-item link-primary"
-                                                           href="#">View Profile</a></li>
+                                                <li><Link to={{ pathname: "/profile", state: { user: props.user } }} className="dropdown-item link-primary">View Profile</Link></li>
                                                     <li><a className="dropdown-item link-primary" href="#">Dietary Preferences</a></li>
                                                     <li>
                                                         <hr className="dropdown-divider"/>

@@ -1,93 +1,103 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"
 import pfp from "../../assets/pfp.png"
-import ProfileInput from "./ProfileInput.js";
+import ProfileInput from "./ProfileInput.js"
 import { useNavigate, useLocation } from "react-router-dom"
 
 export default function Profile(props) {
-  const navigate = useNavigate();
-  const location = useLocation();
+    console.log("props" + props)
+    const { user } = props
+    const navigate = useNavigate()
+    const location = useLocation()
 
-  /*
-  // State to hold the user's ID
-  const [userId, setUserId] = useState(null);
+    console.log("user" + user)
+    //console.log("userID" + user.userId)
+    //let userId = user.userId
 
-  //if login works?
-  useEffect(() => {
-      // Check if user data is available in localStorage
-      const user = JSON.parse(localStorage.getItem("user"));
-      if (user && user.id) {
-          // Set the user ID from localStorage
-          setUserId(user.id);
-      } else {
-          // Redirect to login page if user data is not available
-          navigate("/login", { state: { from: location.pathname } });
-      }
-  }, [navigate, location]);
-  */
-
+    // Delete this line after hardcoding complete
     let userId = 1;
 
-    const [buttons, setButtons] = useState([]);
-    const [selectedButtons, setSelectedButtons] = useState([]);
+    const [buttons, setButtons] = useState([])
+    const [selectedButtons, setSelectedButtons] = useState([])
+    const [firstName, updateFirstName] = useState("") // State for first name
+    const [lastName, updateLastName] = useState("")   // State for last name
 
-    let firstName;
-    let lastName;
-    const [error, setError] = useState("");
+    const [error, setError] = useState("")
 
-    const allergies = ['Celery-Free', 'Crustacean-Free', 'Dairy-Free', 'Egg-Free', 'Fish-Free', 'Gluten-Free', 'Lupine-Free', 'Mustard-Free', 'Peanut-Free', 'Sesame-Free', 'Shellfish-Free', 'Soy-Free', 'Tree-Nut-Free', 'Wheat-Free'];
-    const health = ['Vegetarian', 'Vegan', 'Pork-Free', 'Red-Meat-Free', 'Keto', 'Kosher', 'Low-Sugar', 'Paleo', 'Pescatarian'];
-    const diets = ['High-Fiber', 'Balanced', 'High-Protein', 'Low-Carb', 'Low-Fat', 'Low-Sodium'];
+    const allergies = ['Celery-Free', 'Crustacean-Free', 'Dairy-Free', 'Egg-Free', 'Fish-Free', 'Gluten-Free', 'Lupine-Free', 'Mustard-Free', 'Peanut-Free', 'Sesame-Free', 'Shellfish-Free', 'Soy-Free', 'Tree-Nut-Free', 'Wheat-Free']
+    const health = ['Vegetarian', 'Vegan', 'Pork-Free', 'Red-Meat-Free', 'Keto', 'Kosher', 'Low-Sugar', 'Paleo', 'Pescatarian']
+    const diets = ['High-Fiber', 'Balanced', 'High-Protein', 'Low-Carb', 'Low-Fat', 'Low-Sodium']
 
     // Fetch data from the database when the component mounts
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await fetch(`http://localhost:3081/get-user-dietary-preferences?findUserId=${userId}`);
-                const dietaryPreferences = await response.json();
-                const selectedLabels = dietaryPreferences.map(pref => pref.dietLabel);
-                setSelectedButtons(selectedLabels);
+                const response = await fetch(`http://localhost:3081/get-user-dietary-preferences?findUserId=${userId}`)
+                const dietaryPreferences = await response.json()
+                const selectedLabels = dietaryPreferences.map(pref => pref.dietLabel)
+                setSelectedButtons(selectedLabels)
             } catch (err) {
-                console.error('Failed to retrieve user dietary preferences');
-                console.error(err);
+                console.error('Failed to retrieve user dietary preferences')
+                console.error(err)
             }
         }
 
-        fetchData();
-    }, [userId]);
+        fetchData()
+    }, [userId])
+
+    // Fetch first and last names from the database when the component mounts
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const responseFirstName = await fetch(`http://localhost:3081/get-firstName?userId=${userId}`)
+                const responseLastName = await fetch(`http://localhost:3081/get-lastName?userId=${userId}`)
+                
+                const firstNameData = await responseFirstName.json()
+                const lastNameData = await responseLastName.json()
+
+                updateFirstName(firstNameData)
+                updateLastName(lastNameData)  
+            } catch (err) {
+                console.error('Failed to retrieve user first and last names')
+                console.error(err)
+            }
+        }
+
+        fetchData()
+    }, [userId])
 
     const handleCheckboxChange = (e) => {
-        const { name, checked, value } = e.target;
+        const { name, checked, value } = e.target
 
         if (checked) {
-            setSelectedButtons(prevState => [...prevState, value]);
+            setSelectedButtons(prevState => [...prevState, value])
         } else {
-            setSelectedButtons(prevState => prevState.filter(item => item !== value));
+            setSelectedButtons(prevState => prevState.filter(item => item !== value))
         }
     }
 
     const handleSubmit = async (event, userId) => {
-        event.preventDefault();
-        let firstNameBox = event.target.firstName.value;
-        let lastNameBox = event.target.lastName.value;
+        event.preventDefault()
+        let firstNameBox = event.target.firstName.value
+        let lastNameBox = event.target.lastName.value
 
         if (userId) {
-            let hasChanges = false;
+            let hasChanges = false
             if (firstNameBox) {
                 setFirstName(userId, firstNameBox)
-                hasChanges = true;
+                hasChanges = true
             } 
             if (lastNameBox) {
                 setLastName(userId, lastNameBox)
-                hasChanges = true;
+                hasChanges = true
             }
 
             if (hasChanges) {
-                alert("Name changes submitted successfully! Please refresh the page");
+                alert("Name changes submitted successfully! Please refresh the page")
             } else {
-                setError("No changes to update.");
+                setError("No changes to update.")
             }
         } else {
-            setError("User ID not provided.");
+            setError("User ID not provided.")
         }
     }
 
@@ -187,10 +197,10 @@ export default function Profile(props) {
     return (
         <>
             <div className='bgColor d-flex w-100 m-auto justify-content-evenly'>
-                <div style={{ backgroundColor: "#fff6e8" }} className='border border-black w-25 d-flex flex-column justify-content-between vh-200'>
+            <div style={{ backgroundColor: "#fff6e8" }} className='border border-black w-25 d-flex flex-column justify-content-between vh-200'>
                     <div className='mt-4 d-flex flex-column align-items-center'>
                         <img src={pfp} alt="Default" className='w-25' />
-                        <h2 className='mt-4'>Sample Name</h2>
+                        <h2 className='mt-4'>{firstName} {lastName}</h2> {/* Display fetched names */}
                     </div>
                 </div>
 
