@@ -2,9 +2,9 @@ import React from 'react';
 import {createRoot} from 'react-dom/client';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './index.css';
-import App from './components/App.js';
+import App from './components/App.jsx';
 import reportWebVitals from './reportWebVitals.js';
-import Profile from "./components/Account/Profile.js";
+import Profile from "./components/Account/Profile.jsx";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
@@ -13,7 +13,6 @@ root.render(
         <BrowserRouter>
             <Routes>
                 <Route path="*" element={<App/>}></Route>
-                <Route path="/profile" element={<Profile />}/>
             </Routes>
         </BrowserRouter>
     </React.StrictMode>

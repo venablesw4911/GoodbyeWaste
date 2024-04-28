@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react"
 import pfp from "../../assets/pfp.png"
-import ProfileInput from "./ProfileInput.js"
+import ProfileInput from "./ProfileInput.jsx"
 import { useNavigate, useLocation } from "react-router-dom"
 
 export default function Profile(props) {
-    console.log("props" + props)
+    //console.log("props" + props)
     const { user } = props
     const navigate = useNavigate()
     const location = useLocation()
 
-    console.log("user" + user)
+    console.log("user " + user)
     //console.log("userID" + user.userId)
     //let userId = user.userId
 

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react"
 import '../App.css'
-import Header from "./Header.js"
-import Footer from "./Footer.js"
-import AnimatedRoutes from "./AnimatedRoutes.js"
+import Header from "./Header.jsx"
+import Footer from "./Footer.jsx"
+import AnimatedRoutes from "./AnimatedRoutes.jsx"
 import { useLiveQuery } from "dexie-react-hooks"
 import { dexieDB } from "../dexieDB.js"
 
