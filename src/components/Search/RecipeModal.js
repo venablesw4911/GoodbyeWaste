@@ -1,6 +1,5 @@
 import React, {useEffect, useState, useRef } from "react"
-import { Modal } from 'bootstrap'
-
+const { Modal } = window.bootstrap;
 const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 export default function RecipeModal(props) {
     const { user, recipe, isOpen, onClose, plannerUpdateSuccess } = props;
