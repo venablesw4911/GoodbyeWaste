@@ -9,14 +9,13 @@ import {AnimatePresence} from "framer-motion"
 export default function AnimatedRoutes(props) {
     const { user } = props
     const location = useLocation()
-    console.log(user)
     return (
         <AnimatePresence mode="wait" initial={false}>
             <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<Landing/>}/>
                 <Route path="/login" element={<AccountChange user={user}/>}/>
                 <Route path="/search" element={<SearchResults user={user}/>}/>
-                <Route path="/profile" element={<Profile user={"user"}/>}/>
+                <Route path="/profile" element={<Profile user={user}/>}/>
             </Routes>
         </AnimatePresence>
     )
