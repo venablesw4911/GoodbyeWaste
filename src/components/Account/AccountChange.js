@@ -4,6 +4,10 @@ import splash from "../../assets/Login-Splash.jpg";
 import Login from "./Login.js";
 import Signup from "./Signup.js";
 
+const imageStyle = {
+    width: '40%'
+}
+
 export default function AccountChange(props) {
     const [isLogin, setIsLogin] = useState(true)
     let otherText = isLogin ? "Don't have an account" : "Already have an account";
@@ -17,7 +21,7 @@ export default function AccountChange(props) {
             exit={{x: -window.innerWidth, transition: {duration: 0.5}}}
         >
             <div className="d-flex justify-content-around align-items-center">
-                <div className="login-splash-container w-75">
+                <div style={imageStyle} className="login-splash-container">
                     <img className="rounded-end-5 float-start login-splash"
                          src={splash}
                          alt="Bowl of various foods"/>
