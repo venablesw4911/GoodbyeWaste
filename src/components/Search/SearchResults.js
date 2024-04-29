@@ -61,15 +61,22 @@ export default function SearchResults(props) {
     }, [location.search, pantryItems]);
 
     const fetchSearchResults = async (query, filters) => {
+        //console.log(user.userId)
         try {
-            const response = await fetch(`https://api.edamam.com/search?q=${query}&app_id=59a04cb8&app_key=6e5b27f255727ba299ffd61e2ca5f5ed${filters}`);
-            const data = await response.json();
-            setSearchResult(data); // Store the fetched data in state
-            //console.log(data)
+            const response = await fetch(`http://localhost:3081/edamamSearch/`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json',},
+                body: JSON.stringify({query, filters}),
+            })
+            if (response.status === 200) {
+                const data = await response.json()
+                console.log(data)
+                setSearchResult(data)
+            }
         } catch (error) {
-            console.error('Error fetching search results:', error);
+            console.error('Error fetching search results:', error)
         }
-    };
+    }
 
     function showRecipeInformation (recipe){
         setRecipeDetails(recipe.recipe)
