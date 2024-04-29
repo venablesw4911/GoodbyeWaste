@@ -1,5 +1,5 @@
 import React from 'react'
-import PlannerDate from "./PlannerDate.js";
+import PlannerDate from "./PlannerDate.jsx";
 
 export default function PlannerHeader(props) {
   return (

@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import MealBlock from "./MealBlock.js";
+import MealBlock from "./MealBlock.jsx";
 
 const timeRowContainerStyle = {
   display: 'flex',

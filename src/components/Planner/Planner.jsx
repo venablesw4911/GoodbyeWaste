@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import ShoppingList from "./ShoppingList.js";
-import PlannerHeader from "./PlannerHeader.js";
-import MealRow from "./MealRow.js";
+import ShoppingList from "./ShoppingList.jsx";
+import PlannerHeader from "./PlannerHeader.jsx";
+import MealRow from "./MealRow.jsx";
 
 const dayOfTheWeek = {
   paddingLeft: '15px',
