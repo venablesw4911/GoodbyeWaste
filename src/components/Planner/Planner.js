@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import ShoppingList from "./ShoppingList.js";
 import PlannerHeader from "./PlannerHeader.js";
 import MealRow from "./MealRow.js";
