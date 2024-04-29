@@ -11,28 +11,44 @@ const app = express()
 
 // Define a JWT secret key. This should be isolated by using env variables for security
 const jwtSecretKey = 'dsfdsfsdfdsvcsvdfgefg'
+const APP_ID = process.env.APP_ID ?? ''
+const APP_KEY = process.env.APP_KEY ?? ''
 
 // Set up CORS and JSON middlewares
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+app.put('/edamamSearch', async (req, res) => {
+    const { query, filters } = req.body
+    const url = `https://api.edamam.com/search?q=${query}&app_id=${APP_ID}&app_key=${APP_KEY}${filters}`
+
+    try {
+        const response = await fetch(url)
+        const data = await response.json()
+        res.status(200).json(data)
+    } catch (error) {
+        console.error('Error fetching search results:', error)
+        res.status(500).json({ message: 'Server error' })
+    }
+})
+
 app.get('/recipeByURI', async (req, res) => {
     const { recipeId } = req.body
-    const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${recipeId}&app_id=e4b575be&app_key=8658817f5e5e9cf3ddd6290beb823dc9&field=label&field=image&field=uri`
+    const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${recipeId}&app_id=${APP_ID}&app_key=${APP_KEY}&field=label&field=image&field=uri`
     try {
         const response = await fetch(url)
         const data = await response.json()
         res.status(200).json(data.hits[0].recipe)
     } catch (error) {
         console.error('Error fetching recipeByURI:', error)
+        res.status(500).json({ message: 'Server error' })
     }
 })
 
 app.get('/planner/:userId', async (req, res) => {
     const collection = await db.collection("userMeals")
     const userId = parseInt(req.params.userId)
-    console.log(userId)
     try {
         const entry = await collection.findOne({ userId })
         const meals = entry.plannedMeals
@@ -43,7 +59,7 @@ app.get('/planner/:userId', async (req, res) => {
         }
         for (const meal of meals.breakfast) {
             const id = meal.mealURI.split('_')[1]
-            const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${id}&app_id=e4b575be&app_key=8658817f5e5e9cf3ddd6290beb823dc9&field=label&field=image&field=uri`
+            const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${id}&app_id=${APP_ID}&app_key=${APP_KEY}&field=label&field=image&field=uri`
             const response = await fetch(url)
             const data = await response.json()
             const recipe = data.hits[0].recipe
@@ -55,7 +71,7 @@ app.get('/planner/:userId', async (req, res) => {
         }
         for (const meal of meals.lunch) {
             const id = meal.mealURI.split('_')[1]
-            const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${id}&app_id=e4b575be&app_key=8658817f5e5e9cf3ddd6290beb823dc9&field=label&field=image&field=uri`
+            const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${id}&app_id=${APP_ID}&app_key=${APP_KEY}&field=label&field=image&field=uri`
             const response = await fetch(url)
             const data = await response.json()
             const recipe = data.hits[0].recipe
@@ -67,7 +83,7 @@ app.get('/planner/:userId', async (req, res) => {
         }
         for (const meal of meals.dinner) {
             const id = meal.mealURI.split('_')[1]
-            const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${id}&app_id=e4b575be&app_key=8658817f5e5e9cf3ddd6290beb823dc9&field=label&field=image&field=uri`
+            const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${id}&app_id=${APP_ID}&app_key=${APP_KEY}&field=label&field=image&field=uri`
             const response = await fetch(url)
             const data = await response.json()
             const recipe = data.hits[0].recipe
