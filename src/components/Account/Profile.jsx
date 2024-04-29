@@ -36,7 +36,9 @@ export default function Profile(props) {
             }
         }
 
-        fetchData()
+        if (userId !== 0) {
+            fetchData()
+        }
     }, [userId])
 
     // Fetch first and last names from the database when the component mounts
@@ -46,25 +48,25 @@ export default function Profile(props) {
                 const responseFirstName = await fetch(`http://localhost:3081/get-firstName?userId=${userId}`)
                 const responseLastName = await fetch(`http://localhost:3081/get-lastName?userId=${userId}`)
                 
-                const firstNameData = await responseFirstName.json()
-                const lastNameData = await responseLastName.json()
+                const firstNameString = await responseFirstName.json()
+                const lastNameString = await responseLastName.json()
 
-                // Extract string values from objects
-                const firstNameString = firstNameData.firstName; 
-                const lastNameString = lastNameData.lastName;
+                //console.log(firstNameString) 
+                //console.log(lastNameString)
     
-                updateFirstName(firstNameString)
-                updateLastName(lastNameString)  
+                updateFirstName(firstNameString.firstName)
+                updateLastName(lastNameString.lastName)  
             } catch (err) {
                 console.error('Failed to retrieve user first and last names')
                 console.error(err)
             }
         }
     
-        fetchData()
+        
+        if (userId !== 0) {
+            fetchData()
+        }
     }, [userId])
-    
-    
 
     const handleCheckboxChange = (e) => {
         const { name, checked, value } = e.target
