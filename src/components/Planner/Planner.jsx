@@ -1,76 +1,111 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import ShoppingList from "./ShoppingList.jsx";
 import PlannerHeader from "./PlannerHeader.jsx";
-import MealBlock from "./MealBlock.jsx";
-import GeneratePlannerButton from "./GeneratePlannerButton.jsx";
-import DateDisplayButton from "./DateDisplayButton.jsx";
+import MealRow from "./MealRow.jsx";
 
-export default function Planner () {
-  const [display, setDisplay] = useState('daily')
-  const changeDisplay = (event) => {
-    setDisplay(event.target.value);
-  }
+const dayOfTheWeek = {
+  paddingLeft: '15px',
+  borderLeft: '6px solid red'
+};
 
-  const meals = [
-    {
-      date: 'Monday',
-      breakfast: 'Avocado Toast with Poached Egg',
-      lunch: 'Chicken Caesar Salad',
-      dinner: 'Grilled Salmon with Roasted Vegetables'
-    },
-    {
-      date: 'Tuesday',
-      breakfast: 'Greek Yogurt Parfait',
-      lunch: 'Caprese Sandwich',
-      dinner: 'Pasta Primavera'
-    },
-    {
-      date: 'Wednesday',
-      breakfast: 'Egg Muffins',
-      lunch: 'Turkey and Avocado Wrap',
-      dinner: 'Stir-Fried Tofu with Vegetables'
-    },
-    {
-      date: 'Thursday',
-      breakfast: 'Breakfast Burritos',
-      lunch: 'Quinoa Salad',
-      dinner: 'Shrimp Scampi Pasta'
-    },
-    {
-      date: 'Friday',
-      breakfast: 'Banana Pancakes',
-      lunch: 'Vegetable Minestrone Soup',
-      dinner: 'Teriyaki Chicken Stir-Fry'
-    },
-  ];
+const plannerContainerStyle = {
+  width: '70%',
+  margin: 'auto',
+  paddingTop: '30px',
+}
 
-  const displayCount = display === 'daily' ? 1 : (display === 'threeDays' ? 3 : 5);
+const mealContainerStyle = {
+  width: '100%',
+}
+
+const mealTimeContainerStyle = {
+  display: 'flex',
+  width: '85%',
+  margin: 'auto',
+  marginTop: '1rem',
+  justifyContent: 'space-between',
+}
+
+const dateContainerStyle = {
+  marginTop: '35px',
+  marginLeft: '20px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-evenly',
+}
+
+const shoppingListContainer = {
+  width: '30%',
+  margin: 'auto',
+}
+
+const plannerStyle = {
+  display: 'flex',
+  justifyContent: 'space-between',
+}
+
+export default function Planner (props) {
+  const { user } = props
+
+  const [planner, setPlanner] = useState({})
+  const [breakfast, setBreakfast] = useState([])
+  const [lunch, setLunch] = useState([])
+  const [dinner, setDinner] = useState([])
+
+  useEffect(() => {
+    async function fetchPlanner() {
+      try {
+        const response = await fetch(`http://localhost:3081/planner/${user.userId}/`, {
+          method: 'GET'
+        })
+        if (response.status === 200) {
+          const resultPlanner = await response.json()
+          const breakfastArray = planner.breakfast
+          const lunchArray = planner.lunch
+          const dinnerArray = planner.dinner
+          setBreakfast(breakfastArray)
+          setLunch(lunchArray)
+          setDinner(dinnerArray)
+          setPlanner(resultPlanner)
+        } else {
+          console.log('Error fetching planner:', response.status)
+        }
+        } catch (e) {
+        console.log('Error fetching planner:', e)
+        }
+      }
+      if (user.userId !== 0) {
+        fetchPlanner()
+      }
+    }, [user.userId])
 
   return (
-    <div>
-      <PlannerHeader />
-      <div className='container'>
-        <div className='row justify-content-center'>
-          {meals.slice(0, displayCount).map(meal => (
-            <MealBlock
-              date={meal.date}
-              breakfast={meal.breakfast}
-              lunch={meal.lunch}
-              dinner={meal.dinner}
-            />
-          ))}
+    <div className={'planner-bg'}>
+      <div style={plannerContainerStyle}>
+       <PlannerHeader />
+        <div style={plannerStyle}>
+          <div style={dateContainerStyle}>
+            <h3 style={dayOfTheWeek}>Sun</h3>
+            <h3 style={dayOfTheWeek}>Mon</h3>
+            <h3 style={dayOfTheWeek}>Tue</h3>
+            <h3 style={dayOfTheWeek}>Wed</h3>
+            <h3 style={dayOfTheWeek}>Thu</h3>
+            <h3 style={dayOfTheWeek}>Fri</h3>
+            <h3 style={dayOfTheWeek}>Sat</h3>
+          </div>
+          <div style={mealContainerStyle}>
+            <div style={mealTimeContainerStyle}>
+              <MealRow mealTime={'Breakfast'} mealsArray={planner.breakfast}/>
+              <MealRow mealTime={'Lunch'} mealsArray={planner.lunch}/>
+              <MealRow mealTime={'Dinner'} mealsArray={planner.dinner}/>
+            </div>
+          </div>
+          <div>
+          </div>
+          <div style={shoppingListContainer}>
+            <ShoppingList/>
+          </div>
         </div>
-      </div>
-      <div className='w-25 mt-4 m-auto text-center d-flex justify-content-evenly'>
-        <DateDisplayButton value='daily' text='Daily'
-                           displayMealBlock={changeDisplay} checked={display === 'daily'}/>
-        <DateDisplayButton value='threeDays' text='3 Days'
-                           displayMealBlock={changeDisplay} checked={display === 'threeDays'}/>
-        <DateDisplayButton value='week' text='5 Days'
-                           displayMealBlock={changeDisplay} checked={display === 'week'}/>
-      </div>
-      <div className='text-center mt-3'>
-        <GeneratePlannerButton/>
       </div>
     </div>
   )

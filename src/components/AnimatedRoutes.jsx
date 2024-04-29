@@ -16,6 +16,7 @@ export default function AnimatedRoutes(props) {
                 <Route path="/login" element={<AccountChange user={user}/>}/>
                 <Route path="/search" element={<SearchResults user={user}/>}/>
                 <Route path="/profile" element={<Profile user={user}/>}/>
+                <Route path="/planner" element={<Planner user={user}/>}/>
             </Routes>
         </AnimatePresence>
     )

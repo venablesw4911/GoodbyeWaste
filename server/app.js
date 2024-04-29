@@ -143,7 +143,7 @@ app.post('/favorite', async (req, res) => {
         console.log("Added new favorite");
         return res.status(200).json({ message: "Favorite was added successfully" });
     } catch (error) {
-        console.error("Error while adding favoite:", error);
+        console.error("Error while adding favorite:", error);
         return res.status(500).json({ error: "Internal server error" });
     }
 })

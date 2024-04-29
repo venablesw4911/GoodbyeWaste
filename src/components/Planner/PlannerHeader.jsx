@@ -1,15 +1,18 @@
-import React from "react";
+import React from 'react'
+import PlannerDate from "./PlannerDate.jsx";
 
-export default function PlannerHeader () {
-
-    const today = new Date();
-    const month = today.getMonth() + 1;
-    const year = today.getFullYear();
-    const day = today.getDate();
-
+export default function PlannerHeader(props) {
   return (
-    <div className='border-bottom border-5 border-primary w-25 m-auto mt-5 pb-2'>
-      <h1 className='text-center'>Week of {month}/{day}/{year}</h1>
+    <div
+      className={'text-center d-flex justify-content-between'}>
+      <h1 style={{
+        fontWeight: '900',
+        color: 'black',
+        margin: 'auto 10rem 2rem auto'
+      }}>
+        Weekly Meal Planner
+      </h1>
+      <PlannerDate/>
     </div>
   )
 }
