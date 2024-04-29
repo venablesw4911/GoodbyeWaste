@@ -139,7 +139,7 @@ export default function Header(props) {
                                         </a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link link-primary" href="#">
+                                        <a className="nav-link link-primary" href="">
                                             <FontAwesomeIcon className="fa-fw me-2" icon={faCalendarDay} size="lg"/>
                                             Planner
                                         </a>
