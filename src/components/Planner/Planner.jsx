@@ -1,9 +1,9 @@
 import React from "react";
 import { useState } from "react";
-import PlannerHeader from "./PlannerHeader.js";
-import MealBlock from "./MealBlock.js";
-import GeneratePlannerButton from "./GeneratePlannerButton.js";
-import DateDisplayButton from "./DateDisplayButton.js";
+import PlannerHeader from "./PlannerHeader.jsx";
+import MealBlock from "./MealBlock.jsx";
+import GeneratePlannerButton from "./GeneratePlannerButton.jsx";
+import DateDisplayButton from "./DateDisplayButton.jsx";
 
 export default function Planner () {
   const [display, setDisplay] = useState('daily')

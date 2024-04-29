@@ -1,8 +1,8 @@
 import React, { useState, useEffect  } from "react"
 import { useLocation } from "react-router-dom";
-import RecipeCard from './RecipeCard.js';
-import RecipeModal from "./RecipeModal.js";
-import PantrySideBar from "../Pantry/PantrySideBar.js"
+import RecipeCard from './RecipeCard.jsx';
+import RecipeModal from "./RecipeModal.jsx";
+import PantrySideBar from "../Pantry/PantrySideBar.jsx"
 
 export default function SearchResults(props) {
     const { user } = props
