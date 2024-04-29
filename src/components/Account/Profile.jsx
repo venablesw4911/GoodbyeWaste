@@ -9,17 +9,12 @@ export default function Profile(props) {
     const navigate = useNavigate()
     const location = useLocation()
 
-    console.log("user " + user)
-    //console.log("userID" + user.userId)
-    //let userId = user.userId
-
-    // Delete this line after hardcoding complete
-    let userId = 1;
+    let userId = user.userId
 
     const [buttons, setButtons] = useState([])
     const [selectedButtons, setSelectedButtons] = useState([])
-    const [firstName, updateFirstName] = useState("") // State for first name
-    const [lastName, updateLastName] = useState("")   // State for last name
+    const [firstName, updateFirstName] = useState(null) 
+    const [lastName, updateLastName] = useState(null)   
 
     const [error, setError] = useState("")
 
@@ -54,16 +49,22 @@ export default function Profile(props) {
                 const firstNameData = await responseFirstName.json()
                 const lastNameData = await responseLastName.json()
 
-                updateFirstName(firstNameData)
-                updateLastName(lastNameData)  
+                // Extract string values from objects
+                const firstNameString = firstNameData.firstName; 
+                const lastNameString = lastNameData.lastName;
+    
+                updateFirstName(firstNameString)
+                updateLastName(lastNameString)  
             } catch (err) {
                 console.error('Failed to retrieve user first and last names')
                 console.error(err)
             }
         }
-
+    
         fetchData()
     }, [userId])
+    
+    
 
     const handleCheckboxChange = (e) => {
         const { name, checked, value } = e.target
@@ -198,11 +199,16 @@ export default function Profile(props) {
         <>
             <div className='bgColor d-flex w-100 m-auto justify-content-evenly'>
             <div style={{ backgroundColor: "#fff6e8" }} className='border border-black w-25 d-flex flex-column justify-content-between vh-200'>
-                    <div className='mt-4 d-flex flex-column align-items-center'>
-                        <img src={pfp} alt="Default" className='w-25' />
-                        <h2 className='mt-4'>{firstName} {lastName}</h2> {/* Display fetched names */}
-                    </div>
+                <div className='mt-4 d-flex flex-column align-items-center'>
+                    <img src={pfp} alt="Default" className='w-25' />
+                    {/* Check if firstName and lastName exist */}
+                    {firstName && lastName ? (
+                    <h2 className='mt-4'>{firstName} {lastName}</h2>
+                    ) : (
+                    <h2 className='mt-4'>Name not set</h2>
+                    )}
                 </div>
+            </div>
 
                 <div className=" d-flex justify-content-between">
                     {/* Allergies Box */}
@@ -265,6 +271,7 @@ export default function Profile(props) {
                     </div>
 
                     <div>
+                    <div style={{ backgroundColor: "#fff6e8" }} >
                         <div className="mt-4 height-row mb-2 w-75 mx-auto">
                             <form className="container " onSubmit={(event) => handleButtonSubmit(event, userId)}>
                                 <p> Submit your diet and allergies changes </p>
@@ -277,6 +284,7 @@ export default function Profile(props) {
                             </form>
                         </div>
 
+                        
                         <form className="container " onSubmit={(event) => handleSubmit(event, userId)}>
                             <h2 className='mt-4'>Enter a new first or last name below</h2>
                             <div className="height-row mb-3 w-75 mx-auto">
@@ -307,6 +315,7 @@ export default function Profile(props) {
                                 </button>
                             </div>
                         </form>
+                        </div>
                     </div>
                 </div>
             </div>
