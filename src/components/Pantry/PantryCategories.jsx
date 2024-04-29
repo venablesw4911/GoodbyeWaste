@@ -1,5 +1,5 @@
 import React from "react"
-import PantryButton from "./PantryButton.js"
+import PantryButton from "./PantryButton.jsx"
 
 export default function PantryCategories(props) {
     const ingredients = props.ingredients

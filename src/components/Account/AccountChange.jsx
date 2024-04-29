@@ -1,8 +1,12 @@
 import {useState} from "react";
 import {motion} from "framer-motion";
 import splash from "../../assets/Login-Splash.jpg";
-import Login from "./Login.js";
-import Signup from "./Signup.js";
+import Login from "./Login.jsx";
+import Signup from "./Signup.jsx";
+
+const imageStyle = {
+    width: '40%'
+}
 
 export default function AccountChange(props) {
     const [isLogin, setIsLogin] = useState(true)
@@ -17,7 +21,7 @@ export default function AccountChange(props) {
             exit={{x: -window.innerWidth, transition: {duration: 0.5}}}
         >
             <div className="d-flex justify-content-around align-items-center">
-                <div className="login-splash-container w-75">
+                <div style={imageStyle} className="login-splash-container">
                     <img className="rounded-end-5 float-start login-splash"
                          src={splash}
                          alt="Bowl of various foods"/>

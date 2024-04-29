@@ -208,6 +208,10 @@ a {
     color: white;
 }
 
+.planner-bg {
+    background-color: #fff !important;
+}
+
 .button-action:hover {
     background: #90EE90 !important;
 }

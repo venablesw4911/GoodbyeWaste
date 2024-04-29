@@ -5,7 +5,7 @@ import {
   CDBSidebarHeader,
   CDBSidebarMenu
 } from 'cdbreact';
-import PantryCategories from './PantryCategories.js'
+import PantryCategories from './PantryCategories.jsx'
 
 export default function PantrySideBar(props) {
     const { setPantryItems } = props

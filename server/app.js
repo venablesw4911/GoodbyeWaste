@@ -159,7 +159,7 @@ app.post('/favorite', async (req, res) => {
         console.log("Added new favorite");
         return res.status(200).json({ message: "Favorite was added successfully" });
     } catch (error) {
-        console.error("Error while adding favoite:", error);
+        console.error("Error while adding favorite:", error);
         return res.status(500).json({ error: "Internal server error" });
     }
 })
@@ -237,6 +237,38 @@ app.get('/get-diets', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 })
+
+app.get('/get-user-dietary-preferences', async (req, res) => {
+  let { findUserId } = req.query;
+  findUserId = parseInt(findUserId);
+
+  try {
+    // Find the user by userId
+    const user = await db.collection("user").findOne({ userId: findUserId });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Grab the user's dietaryPreferences array
+    const userDietArray = user.dietaryPreferences;
+
+    // Find allergies and diets in the diets Database based on user's dietaryPreferencesId's
+    const dietaryPreferences = await db.collection("diets")
+      .find({
+        dietID: { $in: userDietArray },
+        $or: [{ dietCategory: "allergy" }, { dietCategory: "diet" }]
+      })
+      .project({ dietLabel: 1, _id: 0 })
+      .toArray();
+
+    res.status(200).json(dietaryPreferences);
+  } catch (error) {
+    console.error('Error retrieving user dietary preferences', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+})
+
 
 // The auth endpoint that creates a new user record or logs a user based on an existing record
 app.post('/auth', async (req, res) => {
@@ -323,6 +355,44 @@ app.post('/create-account', async (req, res) => {
   
 })
 
+app.get('/get-firstName', async (req, res) => {
+  let { userId } = req.query;
+  userId = parseInt(userId);
+
+  try {
+    // Find the user by userId
+    const user = await db.collection("user").findOne({ userId: userId });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'success', firstName: user.firstName});
+  } catch (error) {
+    console.error('Error retrieving user first name', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+})
+
+app.get('/get-lastName', async (req, res) => {
+  let { userId } = req.query;
+  userId = parseInt(userId);
+
+  try {
+    // Find the user by userId
+    const user = await db.collection("user").findOne({ userId: userId });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'success', lastName: user.lastName});
+  } catch (error) {
+    console.error('Error retrieving user last name', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+})
+
 app.post('/pantry-insert', async (req, res) => {
   // Extract data from query parameters
   let { userId, ingredientID, amount } = req.query;
@@ -399,6 +469,28 @@ app.get('/get-user', async (req, res) => {
   }
 });
 
+// Define endpoint to get dietID based on dietLabel
+app.get('/get-diet-id', async (req, res) => {
+  try {
+    // Extract dietLabel from query parameter
+    const { name } = req.query;
+
+    // Find the document with matching dietLabel
+    const diet = await db.collection('diets').findOne({ dietLabel: name });
+
+    // If no document found, return 404
+    if (!diet) {
+      return res.status(404).json({ message: 'Diet not found' });
+    }
+
+    // Otherwise, return the dietID
+    res.json({ dietID: diet.dietID });
+  } catch (error) {
+    console.error('Error retrieving dietID:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 // Setter requests for first name
 app.post('/set-first', async (req, res) => {
   try {
@@ -446,24 +538,28 @@ app.post('/set-last', async (req, res) => {
 // Setter requests for dietary preferences
 app.post('/set-pref', async (req, res) => {
   try {
-      const { userId, dietaryPreferences } = req.body;
-      
-      const result = await db.collection('user').updateOne(
-          { userId },
-          { $set: { dietaryPreferences } },
-          { upsert: true }
-      );
-  
-      if (result.modifiedCount === 1 || result.upsertedCount === 1) {
-          res.json({ message: 'Dietary preferences updated/created successfully' });
-      } else {
-          res.status(500).json({ message: 'Failed to update/create dietary preferences' });
-      }
+    let { userId, dietIDs } = req.body;
+
+    // The dietIDs selected in the form have to change to dietaryPreferences to prepare for the database
+    let dietaryPreferences = dietIDs
+
+    const result = await db.collection('user').updateOne(
+      { userId },
+      { $set: { dietaryPreferences } },
+      { upsert: true }
+    );
+
+    if (result.modifiedCount === 1 || result.upsertedCount === 1) {
+      res.json({ message: 'Dietary preferences updated/created successfully' });
+    } else {
+      res.status(500).json({ message: 'Failed to update/create dietary preferences' });
+    }
   } catch (error) {
-      console.error('Error updating/creating dietary preferences:', error);
-      res.status(500).json({ message: 'Internal server error' });
+    console.error('Error updating/creating dietary preferences:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
+
 
 app.use(express.static('../../build'))
 
