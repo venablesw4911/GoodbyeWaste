@@ -24,7 +24,7 @@ export default function Header(props) {
 
     //const [diets, setDiets] = useState([])
     //const [allergies, setAllergies] = useState([])
-
+    
     useEffect(() => {
         // Fetch allergy diets when component mounts
         async function fetchAllergyDiets() {
@@ -43,7 +43,7 @@ export default function Header(props) {
 
         fetchAllergyDiets();
     }, []);
-
+    
     useEffect(() => {
         // Fetch user's dietary preferences
         async function fetchDietaryPreferences() {

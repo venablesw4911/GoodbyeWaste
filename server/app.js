@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.get('/recipeByURI', async (req, res) => {
     const { recipeId } = req.body
-    const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${recipeId}&app_id=e4b575beapp_key=8658817f5e5e9cf3ddd6290beb823dc9&field=label&field=image&field=uri`
+    const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${recipeId}&app_id=e4b575be&app_key=8658817f5e5e9cf3ddd6290beb823dc9&field=label&field=image&field=uri`
     try {
         const response = await fetch(url)
         const data = await response.json()
@@ -32,6 +32,7 @@ app.get('/recipeByURI', async (req, res) => {
 app.get('/planner/:userId', async (req, res) => {
     const collection = await db.collection("userMeals")
     const userId = parseInt(req.params.userId)
+    console.log(userId)
     try {
         const entry = await collection.findOne({ userId })
         const meals = entry.plannedMeals
@@ -42,7 +43,7 @@ app.get('/planner/:userId', async (req, res) => {
         }
         for (const meal of meals.breakfast) {
             const id = meal.mealURI.split('_')[1]
-            const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${id}&app_id=e4b575beapp_key=8658817f5e5e9cf3ddd6290beb823dc9&field=label&field=image&field=uri`
+            const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${id}&app_id=e4b575be&app_key=8658817f5e5e9cf3ddd6290beb823dc9&field=label&field=image&field=uri`
             const response = await fetch(url)
             const data = await response.json()
             const recipe = data.hits[0].recipe
@@ -54,7 +55,7 @@ app.get('/planner/:userId', async (req, res) => {
         }
         for (const meal of meals.lunch) {
             const id = meal.mealURI.split('_')[1]
-            const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${id}&app_id=e4b575beapp_key=8658817f5e5e9cf3ddd6290beb823dc9&field=label&field=image&field=uri`
+            const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${id}&app_id=e4b575be&app_key=8658817f5e5e9cf3ddd6290beb823dc9&field=label&field=image&field=uri`
             const response = await fetch(url)
             const data = await response.json()
             const recipe = data.hits[0].recipe
@@ -66,7 +67,7 @@ app.get('/planner/:userId', async (req, res) => {
         }
         for (const meal of meals.dinner) {
             const id = meal.mealURI.split('_')[1]
-            const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${id}&app_id=e4b575beapp_key=8658817f5e5e9cf3ddd6290beb823dc9&field=label&field=image&field=uri`
+            const url = `https://api.edamam.com/api/recipes/v2/by-uri?type=public&uri=http%3A%2F%2Fwww.edamam.com%2Fontologies%2Fedamam.owl%23recipe_${id}&app_id=e4b575be&app_key=8658817f5e5e9cf3ddd6290beb823dc9&field=label&field=image&field=uri`
             const response = await fetch(url)
             const data = await response.json()
             const recipe = data.hits[0].recipe
