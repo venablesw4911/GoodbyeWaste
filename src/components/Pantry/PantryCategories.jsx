@@ -12,8 +12,8 @@ export default function PantryCategories(props) {
     })
 
     return (
-        <div className="col-sm p-3">
-            <label>{props.category}</label>
+        <div className="col-auto p-2">
+            <label className="">{props.category}</label>
             <div className="btn-group d-flex flex-column" role="group">
                 {buttons}
             </div>

@@ -215,3 +215,27 @@ a {
 .button-action:hover {
     background: #90EE90 !important;
 }
+
+#header {
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+}
+
+#sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    background-color: #CDC1FF !important;
+    z-index: 0;
+    margin-top: 56px;
+}
+
+@media (max-width: 600px) {
+    #sidebar {
+        display: none;
+    }
+    #searchContent {
+        margin-left: 0 !important;
+    }
+}

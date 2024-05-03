@@ -94,7 +94,7 @@ export default function Header(props) {
     }
 
     return (
-        <div>
+        <div id="header">
             <nav className="navbar navbar-expand-lg bg-body-tertiary">
                 <div className="row d-flex justify-content-between flex-fill mx-0">
                     <a className="navbar-brand col-auto me-0" href="/">

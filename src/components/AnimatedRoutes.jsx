@@ -10,14 +10,16 @@ export default function AnimatedRoutes(props) {
     const { user } = props
     const location = useLocation()
     return (
-        <AnimatePresence mode="wait" initial={false}>
-            <Routes location={location} key={location.pathname}>
-                <Route path="/" element={<Landing/>}/>
-                <Route path="/login" element={<AccountChange user={user}/>}/>
-                <Route path="/search" element={<SearchResults user={user}/>}/>
-                <Route path="/profile" element={<Profile user={user}/>}/>
-                <Route path="/planner" element={<Planner user={user}/>}/>
-            </Routes>
-        </AnimatePresence>
+        <div style={{ marginTop: '56px' }}>
+            <AnimatePresence mode="wait" initial={false}>
+                <Routes location={location} key={location.pathname}>
+                    <Route path="/" element={<Landing/>}/>
+                    <Route path="/login" element={<AccountChange user={user}/>}/>
+                    <Route path="/search" element={<SearchResults user={user}/>}/>
+                    <Route path="/profile" element={<Profile user={user}/>}/>
+                    <Route path="/planner" element={<Planner user={user}/>}/>
+                </Routes>
+            </AnimatePresence>
+        </div>
     )
 }
