@@ -1,6 +1,6 @@
 export default function Footer(props) {
     return (
-      <footer className="position-absolute w-100 footer-bg top-90 py-3">
+      <footer className="position-absolute w-100 footer-bg top-90 py-3" style={{ zIndex: -2 }}>
           <hr/>
           <ul className="nav justify-content-center pb-3 mb-3">
               <li className="nav-item">

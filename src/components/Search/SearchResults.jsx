@@ -10,7 +10,7 @@ export default function SearchResults(props) {
     const location = useLocation();
 
     const [search, setSearch] = useState("");
-    const [searchFilters, setSearchFilters] = useState(new Array());
+    const [searchFilters, setSearchFilters] = useState([]);
     const [searchResult, setSearchResult] = useState(null); // State to store the fetched data
 
     const [pantryItems, setPantryItems] = useState([])
@@ -69,7 +69,7 @@ export default function SearchResults(props) {
             })
             if (response.status === 200) {
                 const data = await response.json()
-                console.log(data)
+                //console.log(data)
                 setSearchResult(data)
             }
         } catch (error) {
@@ -96,51 +96,55 @@ export default function SearchResults(props) {
     }
 
     return (
-        <div className="bg-color row">
-            <div className="col-auto">
+        <div className="bg-color row m-0 h-100">
+            <div className="col-lg bg-secondary-subtle p-0" id="sidebar" style={{ width: '275px'}}>
                 <PantrySideBar setPantryItems={setPantryItems}/>
             </div>
-            <div className="col-10 col-md-9 col-lg-8 col-xl-7 my-4">
-                {showSuccessMessage ?
-                    <div className="alert alert-success alert-dismissible" role="alert">
-                        Updated <a href="/planner">planner</a> successfully!
-                        <button type="button" className="btn-close" onClick={() => setShowSuccessMessage(false)}/>
-                    </div>
-                    :
-                    null
-                }
-                {showFailureMessage ?
-                    <div className="alert alert-danger alert-dismissible" role="alert">
-                        Failure to update planner!
-                        <button type="button" className="btn-close" onClick={() => setShowFailureMessage(false)}/>
-                    </div>
-                    :
-                    null
-                }
-                <div className="mt-3 mb-2 d-flex justify-content-center flex-wrap">
-                    {searchFilters.map((filter, index) => (
-                        <>
-                            <span
-                                className="badge rounded-pill text-secondary border border-secondary my-1 mx-2">{filter}</span>
-                            <span key={index}
-                                  className="badge rounded-pill text-secondary border border-secondary my-1 mx-2">{filter}</span>
-                        </>
-                    ))}
-                </div>
-                {searchResult ? (
-                    <div className="row m-auto">
-                        {searchResult.hits.map((recipe, index) => (
-                            <RecipeCard
-                                key={index}
-                                recipe={recipe.recipe}
-                                favorites={favorites.filter(fav => fav.favoriteRecipeURI == recipe.recipe.uri)}
-                                user={user}
-                                onClick={() => showRecipeInformation(recipe)}/>
+            <div className=" col d-flex justify-content-center p-4" id="searchContent" style={{ marginLeft: '275px' }}>
+                <div className="" style={{ width: '90%' }}>
+
+                    <p>Search results for {search}...</p>
+                    {showSuccessMessage ?
+                        <div className="alert alert-success alert-dismissible" role="alert">
+                            Updated <a href="/planner">planner</a> successfully!
+                            <button type="button" className="btn-close" onClick={() => setShowSuccessMessage(false)}/>
+                        </div>
+                        :
+                        null
+                    }
+                    {showFailureMessage ?
+                        <div className="alert alert-danger alert-dismissible" role="alert">
+                            Failure to update planner!
+                            <button type="button" className="btn-close" onClick={() => setShowFailureMessage(false)}/>
+                        </div>
+                        :
+                        null
+                    }
+                    <div className="mt-3 mb-2 d-flex justify-content-center flex-wrap">
+                        {searchFilters.map((filter, index) => (
+                            <>
+                                <span
+                                    className="badge rounded-pill text-secondary border border-secondary my-1 mx-2">{filter}</span>
+                                <span key={index}
+                                      className="badge rounded-pill text-secondary border border-secondary my-1 mx-2">{filter}</span>
+                            </>
                         ))}
                     </div>
-                ) : (
-                    <p>Loading...</p>
-                )}
+                    {searchResult ? (
+                        <div className="row d-flex justify-content-around">
+                            {searchResult.hits.map((recipe, index) => (
+                                <RecipeCard
+                                    key={index}
+                                    recipe={recipe.recipe}
+                                    favorites={favorites.filter(fav => fav.favoriteRecipeURI === recipe.recipe.uri)}
+                                    user={user}
+                                    onClick={() => showRecipeInformation(recipe)}/>
+                            ))}
+                        </div>
+                    ) : (
+                        <p>Loading...</p>
+                    )}
+                </div>
             </div>
             <RecipeModal
                 user={user}
