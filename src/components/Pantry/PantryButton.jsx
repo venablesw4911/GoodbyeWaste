@@ -23,7 +23,7 @@ export default function PantryButton(props) {
 
     }
     return (
-        <div className="py-1 /*mx-auto*/">
+        <div className="py-1">
             <input onClick={handleClick} type="checkbox" className="btn-check" id={ingredient} autoComplete="off"/>
             <label className="btn btn-outline-primary" htmlFor={ingredient}> {ingredient}</label>
         </div>

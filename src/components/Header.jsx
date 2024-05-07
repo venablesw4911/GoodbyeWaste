@@ -107,7 +107,7 @@ export default function Header(props) {
                             <button className="btn btn-outline-primary dropdown-toggle"
                                     type="button"
                                     data-bs-toggle="collapse"
-                                    data-bs-target="#collapseExample"
+                                    data-bs-target="#filterCollapse"
                                     onClick={toggleCollapse}
                                     aria-expanded={showSearchFilters}>
                                 Filters
@@ -132,21 +132,21 @@ export default function Header(props) {
                             </div>
                             <div className="offcanvas-body ms-1 pt-1">
                                 <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
-                                    <li className="nav-item">
-                                        <a className="nav-link link-primary" href="#">
+                                    {/*<li className="nav-item">
+                                        <a className="nav-link" href="#">
                                             <FontAwesomeIcon className="fa-fw me-2" icon={faBasketShopping} size="lg"/>
                                             Pantry
                                         </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link link-primary" href="#">
+                                    </li>*/}
+                                    <li className="nav-link">
+                                        <Link to={{ pathname: "/planner" }} className="dropdown-item">
                                             <FontAwesomeIcon className="fa-fw me-2" icon={faCalendarDay} size="lg"/>
                                             Planner
-                                        </a>
+                                        </Link>
                                     </li>
                                     {/*
                                         <li className="nav-item">
-                                            <a className="nav-link link-primary" href="#">
+                                            <a className="nav-link" href="#">
                                                 <FontAwesomeIcon className="fa-fw me-2" icon={faCircleInfo} size="lg"/>
                                                 About Us
                                             </a>
@@ -155,7 +155,7 @@ export default function Header(props) {
                                     <li className="nav-item dropdown">
                                         {props.user.loggedIn ?
                                             <span>
-                                                <a className="nav-link link-primary dropdown-toggle" href="#"
+                                                <a className="nav-link dropdown-toggle" href="#"
                                                    role="button"
                                                    aria-expanded="false"
                                                    data-bs-toggle="dropdown">
@@ -163,13 +163,13 @@ export default function Header(props) {
                                                     Account
                                                 </a>
                                                 <ul className="dropdown-menu">
-                                                <li><Link to={{ pathname: "/profile" /*, state: { user: props.user }*/ }} className="dropdown-item link-primary">View Profile</Link></li>
-                                                    <li><a className="dropdown-item link-primary" href="#">Dietary Preferences</a></li>
+                                                <li><Link to={{ pathname: "/profile" /*, state: { user: props.user }*/ }} className="dropdown-item">View Profile</Link></li>
+                                                    <li><a className="dropdown-item" href="#">Dietary Preferences</a></li>
                                                     <li>
                                                         <hr className="dropdown-divider"/>
                                                     </li>
                                                     <li>
-                                                        <a className="dropdown-item link-primary" href="#" onClick={onButtonClick}>
+                                                        <a className="dropdown-item" href="#" onClick={onButtonClick}>
                                                             <FontAwesomeIcon className="fa-fw me-2"
                                                                              icon={faRightFromBracket}/>
                                                             Log out
@@ -178,7 +178,7 @@ export default function Header(props) {
                                                 </ul>
                                             </span>
                                             :
-                                            <a className="nav-link link-primary" href="#" role="button"
+                                            <a className="nav-link" href="#" role="button"
                                                aria-expanded="false"
                                                onClick={onButtonClick}>
                                                 <FontAwesomeIcon className="fa-fw me-2" icon={faUser} size="lg"/>
@@ -197,7 +197,7 @@ export default function Header(props) {
                     </div>
                 </div>
             </nav>
-            <div className={`collapse ${showSearchFilters ? 'show' : ''}`} id="collapseExample">
+            <div id="filterCollapse" className={`collapse ${showSearchFilters ? 'show' : ''}`}>
                 <div className="card card-body rounded-0 d-flex flex-row justify-content-between flex-wrap">
                     <div>
                         <h5>Allergies</h5>

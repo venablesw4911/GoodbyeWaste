@@ -1,11 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import {
-  CDBSidebar,
-  CDBSidebarContent,
-  CDBSidebarHeader,
-  CDBSidebarMenu
-} from 'cdbreact';
+import React, {useState, useEffect} from 'react'
 import PantryCategories from './PantryCategories.jsx'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faBasketShopping } from "@fortawesome/free-solid-svg-icons"
 
 export default function PantrySideBar(props) {
     const { setPantryItems } = props
@@ -47,7 +43,10 @@ export default function PantrySideBar(props) {
     return (
         <div className="p-3 h-100 overflow-y-auto">
             <div className="row">
-                <h2>Pantry</h2>
+                <h2 className="fw-bolder text-center pe-4 my-2">
+                    <FontAwesomeIcon className="fa-fw me-2" icon={faBasketShopping}/>
+                    Pantry
+                </h2>
             </div>
             <div className="row d-flex justify-content-around">
                 {categories}

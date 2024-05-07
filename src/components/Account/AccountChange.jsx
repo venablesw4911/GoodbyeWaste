@@ -14,7 +14,7 @@ export default function AccountChange(props) {
 
     return (
         <motion.main
-            className="max-vh-100 max-vw-100 container login-box"
+            className="max-vh-100 max-vw-100 container login-box p-3"
             initial={{x: -window.innerWidth}}
             transition={{duration: 0.5}}
             animate={{x: 0}}
